@@ -1,0 +1,22 @@
+.router-transition {
+  @apply relative h-full transform;
+}
+
+/* enter start */
+.router-transition-enter {
+  @apply opacity-0 scale-90;
+}
+
+/* enter end */
+.router-transition-enter-active {
+  @apply transition duration-150 opacity-100  scale-100;
+}
+
+/* exit start */
+.router-transition-exit {
+  @apply opacity-100  scale-100;
+}
+/* exit end */
+.router-transition-exit-active {
+  @apply opacity-0 scale-90 transition duration-150;
+}

@@ -1,61 +1,55 @@
-import { AnimatePresence, AnimationProps } from "framer-motion";
-import { FC } from "react";
-import {
-  Route,
-  RouteObject,
-  RouterProvider,
-  createBrowserRouter,
-  createRoutesFromElements,
-} from "react-router-dom";
-import { HomePage } from "./pages/Home";
+import { FC, LegacyRef, createRef } from "react";
+import { RouteObject, createBrowserRouter, useOutlet } from "react-router-dom";
+import { AppContainer } from "./components/layout/AppContainer";
+import { Navbar } from "./components/layout/Navbar";
+import { RouterTransition } from "./components/layout/RouterTransition";
 import { ConfigPage } from "./pages/Config";
+import { HomePage } from "./pages/Home";
 
-type CustomRouteObject = RouteObject & { label?: string; icon?: JSX.Element };
-
-const animationConfig: AnimationProps = {
-  initial: {
-    opacity: 0,
-  },
-  animate: {
-    x: 0,
-    opacity: 1,
-  },
-  exit: {
-    opacity: 0,
-  },
-  transition: {
-    type: "spring",
-    duration: 1,
-  },
+type CustomRouteObject = RouteObject & {
+  label?: string;
+  icon?: JSX.Element;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  nodeRef?: LegacyRef<any>;
 };
 
 export const routes: CustomRouteObject[] = [
   {
     path: "/",
-    element: <HomePage {...animationConfig} />,
+    element: <HomePage />,
     id: "home",
     label: "Home",
+    nodeRef: createRef(),
   },
   {
     path: "/config",
-    element: <ConfigPage {...animationConfig} />,
+    element: <ConfigPage />,
     id: "config",
-    label: "config",
+    label: "Config",
+    nodeRef: createRef(),
   },
 ];
 
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    routes.map((route) => (
-      <Route key={route.id} path={route.path!} element={route.element} />
-    ))
-  )
-);
-
 export const App: FC = () => {
+  const currentOutlet = useOutlet();
   return (
-    <AnimatePresence>
-      <RouterProvider router={router} />
-    </AnimatePresence>
+    <>
+      <Navbar />
+      <AppContainer>
+        <RouterTransition>{currentOutlet}</RouterTransition>
+      </AppContainer>
+    </>
   );
 };
+
+export const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    children: routes.map((route) => ({
+      index: route.path === "/",
+      path: route.path === "/" ? undefined : route.path,
+      element: route.element,
+    })),
+  },
+]);
