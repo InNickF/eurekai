@@ -1,0 +1,27 @@
+@font-face {
+  font-family: "paragraph";
+  font-weight: 400;
+  font-style: normal;
+  src: url(./Montserrat-Light.ttf);
+}
+
+@font-face {
+  font-family: "paragraph";
+  font-weight: 400;
+  font-style: italic;
+  src: url(./Montserrat-LightItalic.ttf);
+}
+
+@font-face {
+  font-family: "paragraph";
+  font-weight: 800;
+  font-style: normal;
+  src: url(./Montserrat-SemiBold.ttf);
+}
+
+@font-face {
+  font-family: "paragraph";
+  font-weight: 800;
+  font-style: italic;
+  src: url(./Montserrat-SemiBoldItalic.ttf);
+}

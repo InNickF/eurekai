@@ -1,5 +1,4 @@
-@import "./custom.css";
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import url("./tailwind.css");
+@import url("./fonts/index.css");
+@import url("./vars/index.css");
+@import url("./custom.css");

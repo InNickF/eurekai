@@ -1,0 +1,27 @@
+@font-face {
+  font-family: "heading";
+  font-weight: 400;
+  font-style: normal;
+  src: url(./Robotoheading-Light.ttf);
+}
+
+@font-face {
+  font-family: "heading";
+  font-weight: 400;
+  font-style: italic;
+  src: url(./Robotoheading-LightItalic.ttf);
+}
+
+@font-face {
+  font-family: "heading";
+  font-weight: 800;
+  font-style: normal;
+  src: url(./Robotoheading-Bold.ttf);
+}
+
+@font-face {
+  font-family: "heading";
+  font-weight: 800;
+  font-style: italic;
+  src: url(./RobotoSerif-BoldItalic.ttf);
+}
