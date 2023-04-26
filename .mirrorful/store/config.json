@@ -1,6 +1,297 @@
 {
 	"primitives": {
-		"colors": {},
+		"colors": {
+			"gray": {
+				"50": {
+					"id": "10240035-cac5-4104-902d-1392cb99b8ca",
+					"value": "#c3c3c3",
+					"type": "color"
+				},
+				"100": {
+					"id": "a9270189-9afe-4b3b-bb27-eeec4c85c5ae",
+					"value": "#b4b4b4",
+					"type": "color"
+				},
+				"200": {
+					"id": "3db95ae8-7e83-4032-ba47-139e86ae12ad",
+					"value": "#a5a5a5",
+					"type": "color"
+				},
+				"300": {
+					"id": "1609b318-536f-4642-ba07-d6ab71203d36",
+					"value": "#969696",
+					"type": "color"
+				},
+				"400": {
+					"id": "db7c7d7b-712a-4bb9-b53d-b70d8cbb0881",
+					"value": "#868686",
+					"type": "color"
+				},
+				"500": {
+					"id": "cafa5c58-ed32-4afe-addc-a0054e150220",
+					"value": "#777777",
+					"type": "color"
+				},
+				"600": {
+					"id": "1b5ffa43-c5d3-45c9-9672-5a0c0c827878",
+					"value": "#686868",
+					"type": "color"
+				},
+				"700": {
+					"id": "5fc3a0f0-eb68-459e-881e-0c9fa5d06750",
+					"value": "#585858",
+					"type": "color"
+				},
+				"800": {
+					"id": "d0775df4-8d7b-49e8-9159-ccfadf61a107",
+					"value": "#494949",
+					"type": "color"
+				},
+				"900": {
+					"id": "e752430d-aaa8-4525-b05d-092ff2f40577",
+					"value": "#3a3a3a",
+					"type": "color"
+				},
+				"base": {
+					"id": "acdcdf1a-8695-4255-9583-45a21c547ee3",
+					"value": "#777777",
+					"type": "color"
+				}
+			},
+			"black": {
+				"base": {
+					"id": "a15384b1-741d-4f3b-b7fa-2d8f2ea871d8",
+					"value": "#000000",
+					"type": "color"
+				}
+			},
+			"white": {
+				"base": {
+					"id": "0a6057af-39ac-41ad-bcd2-533e91c5db2b",
+					"value": "#ffffff",
+					"type": "color"
+				}
+			},
+			"ghost": {
+				"lightest": {
+					"id": "d51d0b34-c2f7-4825-a7b6-3a4a4ce8e44e",
+					"value": "#ffffff",
+					"type": "color"
+				},
+				"base": {
+					"id": "23d21dfc-e9ec-42b4-ba18-d787175e9772",
+					"value": "#F7F0E9",
+					"type": "color"
+				},
+				"light": {
+					"id": "9292cfcf-1296-40aa-8c2c-d9c9ae0a516d",
+					"value": "#FBF8F4",
+					"type": "color"
+				},
+				"lighter": {
+					"id": "b6b668c6-35f2-41f2-9198-3860200b1d48",
+					"value": "#fdfcfa",
+					"type": "color"
+				},
+				"dark": {
+					"id": "f32dd6f0-f352-48c0-a14d-1b32ca6afa2d",
+					"value": "#ede6df",
+					"type": "color"
+				},
+				"darker": {
+					"id": "2c1c8679-023b-423c-ad99-a3701183be09",
+					"value": "#e2dbd5",
+					"type": "color"
+				},
+				"darkest": {
+					"id": "3601b612-d997-44f8-bf22-ba0da6ddc337",
+					"value": "#ccc6c0",
+					"type": "color"
+				}
+			},
+			"success": {
+				"base": {
+					"id": "41f92b4f-4375-42b7-9681-779682d6903e",
+					"value": "#37de7d",
+					"type": "color"
+				},
+				"light": {
+					"id": "b9884cb9-6962-44b0-acb0-3c49c6a2cdae",
+					"value": "#a6ffcc",
+					"type": "color"
+				},
+				"dark": {
+					"id": "d54df2cc-c0c5-4e39-b359-b7f0f92d781d",
+					"value": "#36b36c",
+					"type": "color"
+				},
+				"darker": {
+					"id": "f9d3ca05-112c-4b8c-b89e-b2a3263df908",
+					"value": "#1f6630",
+					"type": "color"
+				},
+				"above-base": {
+					"id": "10ab78a4-78e4-4dff-b96b-60ee59cab4a4",
+					"value": "#1f6630",
+					"type": "color"
+				},
+				"above-darker": {
+					"id": "8d919cc1-a96a-4a27-ab78-8ccae33f4b52",
+					"value": "#ffffff",
+					"type": "color"
+				}
+			},
+			"warning": {
+				"base": {
+					"id": "32b01ce5-0650-49ce-97d9-428a1ece0733",
+					"value": "#ffdd33",
+					"type": "color"
+				},
+				"light": {
+					"id": "bc0c0604-a9e0-4f7d-878b-cc16255eb241",
+					"value": "#fff0a6",
+					"type": "color"
+				},
+				"dark": {
+					"id": "1ec35560-7d70-4858-a637-82bb50f6b5d0",
+					"value": "#ccb129",
+					"type": "color"
+				},
+				"darker": {
+					"id": "01f74bcd-74c9-4c21-bf78-a6b5f15f1d83",
+					"value": "#806f19",
+					"type": "color"
+				},
+				"above-base": {
+					"id": "d2c4d097-947e-4b11-821b-136d53bd705e",
+					"value": "#806f19",
+					"type": "color"
+				},
+				"above-darker": {
+					"id": "95b1a418-a177-4d45-bd63-3bc8d37865f7",
+					"value": "#ffffff",
+					"type": "color"
+				}
+			},
+			"error": {
+				"base": {
+					"id": "cc3efa0f-4229-4c4b-ad08-23686e195970",
+					"value": "#ff3333",
+					"type": "color"
+				},
+				"light": {
+					"id": "57114d8e-b0af-4dac-96e2-989eab1b9c85",
+					"value": "#ffb3b3",
+					"type": "color"
+				},
+				"dark": {
+					"id": "78dfa606-c2f0-44e3-93a2-90e07f855510",
+					"value": "#cc2929",
+					"type": "color"
+				},
+				"darker": {
+					"id": "c661e609-735c-4eba-81ef-b5eeea3746b3",
+					"value": "#661414",
+					"type": "color"
+				},
+				"above-base": {
+					"id": "01ed03bc-f093-49b1-8754-099527256e6b",
+					"value": "#ffffff",
+					"type": "color"
+				},
+				"above-darker": {
+					"id": "1418c053-e1ce-4173-bf28-867a0335ee70",
+					"value": "#ffffff",
+					"type": "color"
+				}
+			},
+			"primary": {
+				"above-darker": {
+					"id": "c12f6642-7f96-46d6-a657-c516bf1b2266",
+					"value": "#ffffff",
+					"type": "color"
+				},
+				"base": {
+					"id": "bc159b41-81b5-4483-b8eb-768425a75597",
+					"value": "#FC576D",
+					"type": "color"
+				},
+				"light": {
+					"id": "75dd48c5-ed40-4620-925b-5f78f1b05977",
+					"value": "#FFB4BE",
+					"type": "color"
+				},
+				"dark": {
+					"id": "8b3005f2-aecb-4455-ab0e-bb0ac60001ce",
+					"value": "#ad3d4c",
+					"type": "color"
+				},
+				"above-base": {
+					"id": "85b2f5da-cd76-4cba-a8c4-277a009f557c",
+					"value": "#ffffff",
+					"type": "color"
+				},
+				"darker": {
+					"id": "b92b6849-6a6e-4fbd-a7f9-f1553b934655",
+					"value": "#541D25",
+					"type": "color"
+				}
+			},
+			"secondary": {
+				"50": {
+					"id": "1c1628dd-178c-462a-aa95-868ea3292163",
+					"value": "#8499B0",
+					"type": "color"
+				},
+				"base": {
+					"id": "1fc0a5af-2917-42eb-90bb-29e68f54e485",
+					"value": "#546373",
+					"type": "color"
+				},
+				"dark": {
+					"id": "1c0e549d-2395-4dcf-b03f-9672098ae51d",
+					"value": "#353F49",
+					"type": "color"
+				},
+				"darker": {
+					"id": "9d113be9-28f4-4fb9-803c-23515c310141",
+					"value": "#1F252A",
+					"type": "color"
+				},
+				"above-base": {
+					"id": "41ad550f-3aba-49a2-af8a-fc3d15703986",
+					"value": "#ffffff",
+					"type": "color"
+				},
+				"above-darker": {
+					"id": "06e5d1f0-d675-43c0-a4a6-649d2c61f368",
+					"value": "#ffffff",
+					"type": "color"
+				}
+			},
+			"text": {
+				"base": {
+					"id": "a8c5d853-aab4-42c3-a6a0-3acdcaf2262e",
+					"value": "#1F252A",
+					"type": "color"
+				},
+				"secondary": {
+					"id": "c9204d2d-903c-4d2a-8a6c-866f23ea25e0",
+					"value": "#8499B0",
+					"type": "color"
+				},
+				"link": {
+					"id": "7e3c3e23-05a6-4b12-9703-520859ea2a4c",
+					"value": "#FC576D",
+					"type": "color"
+				},
+				"link-visited": {
+					"id": "0e2aa24e-7ae4-4f02-b91f-32fd80d86465",
+					"value": "#ad3d4c",
+					"type": "color"
+				}
+			}
+		},
 		"typography": {
 			"fontSizes": {
 				"r-xs": {

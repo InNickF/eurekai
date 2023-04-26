@@ -1,2 +1,9 @@
-@import url(./sans/index.css);
-@import url(./serif/index.css);
+@import url(./paragraph/index.css);
+@import url(./heading/index.css);
+
+:root {
+  --primary-font: "Paragraph";
+  --display-font: "Heading";
+  --secondary-fonts: "system-ui", "Roboto", "Helvetica Neue", "Arial";
+  --default-fonts: sans-serif;
+}
