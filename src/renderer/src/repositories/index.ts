@@ -15,10 +15,10 @@ import {
   Store,
   User,
   UserConfig,
+  Config,
 } from "@renderer/types";
 import { schemaToString } from "@renderer/utils";
 import Dexie, { Table } from "dexie";
-import { Config } from "electron";
 
 const usersStore: Store = {
   users: schemaToString(UserSchema),
@@ -33,19 +33,19 @@ const configStore: Store = {
 };
 
 const promptsStore: Store = {
-  config: schemaToString(PromptSchema),
+  prompts: schemaToString(PromptSchema),
 };
 
 const promptCategoriesStore: Store = {
-  config: schemaToString(PromptCategorySchema),
+  promptCategories: schemaToString(PromptCategorySchema),
 };
 
 const messagesStore: Store = {
-  config: schemaToString(MessageSchema),
+  messages: schemaToString(MessageSchema),
 };
 
 const chatsStore: Store = {
-  config: schemaToString(ChatSchema),
+  chats: schemaToString(ChatSchema),
 };
 
 export class DB extends Dexie {
@@ -68,5 +68,13 @@ export class DB extends Dexie {
       ...promptCategoriesStore,
       ...promptsStore,
     });
+    this.config
+      .count()
+      .then((count) => count > 0)
+      .then((hasConfig) => {
+        if (!hasConfig) {
+          this.config.add({ id: 1, currentUserId: null });
+        }
+      });
   }
 }

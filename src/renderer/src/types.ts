@@ -3,6 +3,7 @@ import {
   ChatSchema,
   ChatTypeSchema,
   ConfigSchema,
+  IdSchema,
   MessageRoleSchema,
   MessageSchema,
   PromptCategorySchema,
@@ -15,6 +16,7 @@ export type Store = {
   [key: string]: string;
 };
 
+export type Id = z.infer<typeof IdSchema>;
 export type ChatType = z.infer<typeof ChatTypeSchema>;
 export type MessageRole = z.infer<typeof MessageRoleSchema>;
 export type Chat = z.infer<typeof ChatSchema>;

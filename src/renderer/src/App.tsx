@@ -3,6 +3,7 @@ import { RouteObject, createBrowserRouter, useOutlet } from "react-router-dom";
 import { AppContainer } from "./components/layout/AppContainer";
 import { Navbar } from "./components/layout/Navbar";
 import { RouterTransition } from "./components/layout/RouterTransition";
+import QueryProvider from "./components/others/QueryProvider";
 import { ConfigPage } from "./pages/Config";
 import { HomePage } from "./pages/Home";
 
@@ -34,10 +35,12 @@ export const App: FC = () => {
   const currentOutlet = useOutlet();
   return (
     <>
-      <Navbar />
-      <AppContainer>
-        <RouterTransition>{currentOutlet}</RouterTransition>
-      </AppContainer>
+      <QueryProvider>
+        <Navbar />
+        <AppContainer>
+          <RouterTransition>{currentOutlet}</RouterTransition>
+        </AppContainer>
+      </QueryProvider>
     </>
   );
 };
