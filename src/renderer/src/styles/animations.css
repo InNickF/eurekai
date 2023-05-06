@@ -1,0 +1,13 @@
+.entrance-animation {
+  animation: entrance 0.25s ease-in-out forwards;
+  @apply opacity-0;
+}
+
+@keyframes entrance {
+  0% {
+    @apply opacity-0;
+  }
+  100% {
+    @apply opacity-100;
+  }
+}

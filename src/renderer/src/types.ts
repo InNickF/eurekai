@@ -26,3 +26,16 @@ export type Prompt = z.infer<typeof PromptSchema>;
 export type Config = z.infer<typeof ConfigSchema>;
 export type UserConfig = z.infer<typeof UserConfigSchema>;
 export type User = z.infer<typeof UserSchema>;
+
+export type Layout = (
+  page: React.ReactElement<
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    any,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    string | React.JSXElementConstructor<any>
+  > | null
+) => React.ReactNode;
+
+export type Page<T> = T & {
+  layout?: Layout;
+};

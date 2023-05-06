@@ -11,7 +11,7 @@ const queryClient = new QueryClient({
   queryCache: new QueryCache(),
 });
 
-const QueryProvider: FC<PropsWithChildren> = ({ children }) => {
+export const QueryProvider: FC<PropsWithChildren> = ({ children }) => {
   const isSecondRender = useRef(false);
 
   if (!isSecondRender.current) {
@@ -34,5 +34,3 @@ const QueryProvider: FC<PropsWithChildren> = ({ children }) => {
     </QueryClientProvider>
   );
 };
-
-export default QueryProvider;

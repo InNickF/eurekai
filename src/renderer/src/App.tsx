@@ -1,17 +1,23 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FC, LegacyRef, createRef } from "react";
-import { RouteObject, createBrowserRouter, useOutlet } from "react-router-dom";
-import { AppContainer } from "./components/layout/AppContainer";
-import { Navbar } from "./components/layout/Navbar";
+import {
+  RouteObject,
+  createBrowserRouter,
+  useLocation,
+  useOutlet,
+} from "react-router-dom";
 import { RouterTransition } from "./components/layout/RouterTransition";
-import QueryProvider from "./components/others/QueryProvider";
 import { ConfigPage } from "./pages/Config";
 import { HomePage } from "./pages/Home";
+import { LoginPage } from "./pages/Login";
+import { Layout } from "./types";
 
 type CustomRouteObject = RouteObject & {
   label?: string;
   icon?: JSX.Element;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   nodeRef?: LegacyRef<any>;
+  layout?: Layout;
 };
 
 export const routes: CustomRouteObject[] = [
@@ -21,6 +27,7 @@ export const routes: CustomRouteObject[] = [
     id: "home",
     label: "Home",
     nodeRef: createRef(),
+    layout: HomePage.layout,
   },
   {
     path: "/config",
@@ -28,20 +35,30 @@ export const routes: CustomRouteObject[] = [
     id: "config",
     label: "Config",
     nodeRef: createRef(),
+    layout: ConfigPage.layout,
+  },
+  {
+    path: "/login",
+    element: <LoginPage />,
+    id: "login",
+    label: "Login",
+    nodeRef: createRef(),
+    layout: LoginPage.layout,
   },
 ];
 
 export const App: FC = () => {
   const currentOutlet = useOutlet();
+  const location = useLocation();
+
+  const layout = routes.find(
+    (route) => route.path === location.pathname
+  )?.layout;
+
+  const renderLayout: Layout = layout ?? ((page) => page);
+
   return (
-    <>
-      <QueryProvider>
-        <Navbar />
-        <AppContainer>
-          <RouterTransition>{currentOutlet}</RouterTransition>
-        </AppContainer>
-      </QueryProvider>
-    </>
+    <>{renderLayout(<RouterTransition>{currentOutlet}</RouterTransition>)}</>
   );
 };
 

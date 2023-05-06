@@ -1,13 +1,15 @@
+import { AppLayout } from "@renderer/components/layout/AppLayout";
+import { Page } from "@renderer/types";
 import { FC } from "react";
-import { Link } from "react-router-dom";
-import { UserSelector } from "./components/UserSelector";
 
-export const HomePage: FC = () => {
+export const HomePage: Page<FC> = () => {
   return (
-    <section className="grid place-content-center h-full">
-      <h1>Hello Word</h1>
-      <Link to="/config">Config</Link>
-      <UserSelector />
-    </section>
+    <>
+      <h1>Hi</h1>
+    </>
   );
+};
+
+HomePage.layout = (page) => {
+  return <AppLayout>{page}</AppLayout>;
 };
