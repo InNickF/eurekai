@@ -14,8 +14,9 @@ export const UserSelector: FC = () => {
   const { register, handleSubmit, reset } = useForm<User>();
   const setUser = useSetAtom(userAtom);
   const createUserMutation = useCreateUser({
-    onSuccess: () => {
+    onSuccess: (user) => {
       reset();
+      // setUser(user);
     },
   });
 

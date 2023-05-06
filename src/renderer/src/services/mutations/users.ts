@@ -1,10 +1,11 @@
+import { User } from "@renderer/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createUser, deleteUser, updateUser } from "../api/users";
 import { queryKeys } from "../keys";
 
 export const useCreateUser = ({
   onSuccess,
-}: { onSuccess?: () => void } = {}) => {
+}: { onSuccess?: (user: User) => void } = {}) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -12,8 +13,8 @@ export const useCreateUser = ({
     onSettled() {
       queryClient.invalidateQueries(queryKeys.users.all);
     },
-    onSuccess() {
-      onSuccess?.();
+    onSuccess(data) {
+      onSuccess?.(data);
     },
   });
 };
