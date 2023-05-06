@@ -1,4 +1,4 @@
-import { PromptCategory } from "@renderer/types";
+import { PromptCategory, PromptCategoryPayload } from "@renderer/types";
 import { DB } from ".";
 import { PromptRepository } from "./prompt";
 
@@ -27,10 +27,16 @@ export class PromptCategoryRepository extends DB {
   }
 
   async addPromptCategory(
-    promptCategory: PromptCategory
+    promptCategory: PromptCategoryPayload
   ): Promise<PromptCategory> {
-    await this.promptCategories.add(promptCategory);
-    return promptCategory;
+    const promptCategoryId = (await this.promptCategories.add(
+      promptCategory as PromptCategory
+    )) as number;
+
+    const addedPromptCategory = await this.getPromptCategoryById(
+      promptCategoryId
+    );
+    return addedPromptCategory as PromptCategory;
   }
 
   async updatePromptCategory(

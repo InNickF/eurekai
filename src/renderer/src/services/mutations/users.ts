@@ -1,14 +1,47 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createUser } from "../api/users";
+import { createUser, deleteUser, updateUser } from "../api/users";
 import { queryKeys } from "../keys";
 
-export const useCreateUser = () => {
+export const useCreateUser = ({
+  onSuccess,
+}: { onSuccess?: () => void } = {}) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: createUser,
     onSettled() {
-      queryClient.invalidateQueries(queryKeys.users.all._def);
+      queryClient.invalidateQueries(queryKeys.users.all);
+    },
+    onSuccess() {
+      onSuccess?.();
+    },
+  });
+};
+
+export const useUpdateUser = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: updateUser,
+    onSuccess(data) {
+      queryClient.invalidateQueries(queryKeys.users.detail(data.id));
+    },
+    onSettled() {
+      queryClient.invalidateQueries(queryKeys.users.all);
+    },
+  });
+};
+
+export const useDeleteUser = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: deleteUser,
+    onSuccess(_data, context) {
+      queryClient.invalidateQueries(queryKeys.users.detail(context.id));
+    },
+    onSettled() {
+      queryClient.invalidateQueries(queryKeys.users.all);
     },
   });
 };

@@ -1,4 +1,4 @@
-import { Chat } from "@renderer/types";
+import { Chat, ChatPayload } from "@renderer/types";
 import { DB } from ".";
 import { MessageRepository } from "./message";
 
@@ -24,9 +24,10 @@ export class ChatRepository extends DB {
       .toArray()) as Chat[];
   }
 
-  async addChat(chat: Chat): Promise<Chat> {
-    await this.chats.add(chat);
-    return chat;
+  async addChat(chat: ChatPayload): Promise<Chat> {
+    const chatId = (await this.chats.add(chat as Chat)) as number;
+    const addedChat = await this.getChatById(chatId);
+    return addedChat as Chat;
   }
 
   async updateChat(chat: Chat): Promise<Chat> {

@@ -1,6 +1,5 @@
 import {
   ChatSchema,
-  ConfigSchema,
   MessageSchema,
   PromptCategorySchema,
   PromptSchema,
@@ -12,46 +11,45 @@ import {
   Message,
   Prompt,
   PromptCategory,
-  Store,
+  DBStore,
   User,
   UserConfig,
-  Config,
 } from "@renderer/types";
 import { schemaToString } from "@renderer/utils";
 import Dexie, { Table } from "dexie";
 
-const usersStore: Store = {
+const usersStore: DBStore = {
   users: schemaToString(UserSchema),
 };
 
-const usersConfigStore: Store = {
+const usersConfigStore: DBStore = {
   userConfigs: schemaToString(UserConfigSchema),
 };
 
-const configStore: Store = {
-  config: schemaToString(ConfigSchema),
-};
+// const configStore: Store = {
+//   config: schemaToString(ConfigSchema),
+// };
 
-const promptsStore: Store = {
+const promptsStore: DBStore = {
   prompts: schemaToString(PromptSchema),
 };
 
-const promptCategoriesStore: Store = {
+const promptCategoriesStore: DBStore = {
   promptCategories: schemaToString(PromptCategorySchema),
 };
 
-const messagesStore: Store = {
+const messagesStore: DBStore = {
   messages: schemaToString(MessageSchema),
 };
 
-const chatsStore: Store = {
+const chatsStore: DBStore = {
   chats: schemaToString(ChatSchema),
 };
 
 export class DB extends Dexie {
   users!: Table<User>;
   userConfigs!: Table<UserConfig>;
-  config!: Table<Config>;
+  // config!: Table<Config>;
   chats!: Table<Chat>;
   messages!: Table<Message>;
   promptCategories!: Table<PromptCategory>;
@@ -62,19 +60,19 @@ export class DB extends Dexie {
     this.version(1).stores({
       ...usersStore,
       ...usersConfigStore,
-      ...configStore,
+      // ...configStore,
       ...chatsStore,
       ...messagesStore,
       ...promptCategoriesStore,
       ...promptsStore,
     });
-    this.config
-      .count()
-      .then((count) => count > 0)
-      .then((hasConfig) => {
-        if (!hasConfig) {
-          this.config.add({ id: 1, currentUserId: null });
-        }
-      });
+    // this.config
+    //   .count()
+    //   .then((count) => count > 0)
+    //   .then((hasConfig) => {
+    //     if (!hasConfig) {
+    //       this.config.add({ id: 1, currentUserId: null });
+    //     }
+    //   });
   }
 }

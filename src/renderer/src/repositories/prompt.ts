@@ -1,4 +1,4 @@
-import { Prompt, PromptCategory } from "@renderer/types";
+import { Prompt, PromptCategory, PromptPayload } from "@renderer/types";
 import { DB } from ".";
 
 type PromisePrompt = Promise<Prompt | null>;
@@ -32,9 +32,10 @@ export class PromptRepository extends DB {
       .toArray()) as Prompt[];
   }
 
-  async addPrompt(prompt: Prompt): Promise<Prompt> {
-    await this.prompts.add(prompt);
-    return prompt;
+  async addPrompt(prompt: PromptPayload): Promise<Prompt> {
+    const promptId = (await this.prompts.add(prompt as Prompt)) as number;
+    const addedPrompt = await this.getPromptById(promptId);
+    return addedPrompt as Prompt;
   }
 
   async updatePrompt(prompt: Prompt): Promise<Prompt> {

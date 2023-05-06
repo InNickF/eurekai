@@ -1,4 +1,7 @@
-import { useCreateUser } from "@renderer/services/mutations/users";
+import {
+  useCreateUser,
+  useDeleteUser,
+} from "@renderer/services/mutations/users";
 import { useUsers } from "@renderer/services/queries/users";
 import { userAtom } from "@renderer/state/users";
 import { User } from "@renderer/types";
@@ -8,12 +11,25 @@ import { useForm } from "react-hook-form";
 
 export const UserSelector: FC = () => {
   const { data: users, isLoading } = useUsers();
-  const { register, handleSubmit } = useForm<User>();
+  const { register, handleSubmit, reset } = useForm<User>();
   const setUser = useSetAtom(userAtom);
-  const mutation = useCreateUser();
+  const createUserMutation = useCreateUser({
+    onSuccess: () => {
+      reset();
+    },
+  });
 
+  const deleteUserMutation = useDeleteUser();
   const onSubmit = (data: User) => {
-    mutation.mutate(data);
+    createUserMutation.mutate(data);
+  };
+
+  const onDelete = (user: User) => {
+    deleteUserMutation.mutate(user);
+  };
+
+  const onSelect = (user: User) => {
+    setUser(user);
   };
 
   return (
@@ -25,8 +41,9 @@ export const UserSelector: FC = () => {
       <ul>
         {isLoading && <li>Loading...</li>}
         {users?.map((user) => (
-          <li key={user.id} onClick={() => setUser(user)}>
-            {user.name}
+          <li key={user.id}>
+            <button onClick={() => onSelect(user)}>{user.name}</button>{" "}
+            <button onClick={() => onDelete(user)}>Delete</button>
           </li>
         ))}
       </ul>

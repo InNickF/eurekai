@@ -1,4 +1,4 @@
-import { Message } from "@renderer/types";
+import { Message, MessagePayload } from "@renderer/types";
 import { DB } from ".";
 
 type PromiseMessage = Promise<Message | null>;
@@ -42,9 +42,10 @@ export class MessageRepository extends DB {
     return (await this.messages.get(id)) as Message;
   }
 
-  async addMessage(message: Message): Promise<Message> {
-    await this.messages.add(message);
-    return message;
+  async addMessage(message: MessagePayload): Promise<Message> {
+    const messageId = (await this.messages.add(message as Message)) as number;
+    const addedMessage = await this.getMessageById(messageId);
+    return addedMessage as Message;
   }
 
   async updateMessage(message: Message): Promise<Message> {

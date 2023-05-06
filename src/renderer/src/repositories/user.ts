@@ -1,4 +1,4 @@
-import { User } from "@renderer/types";
+import { User, UserPayload } from "@renderer/types";
 import { DB } from ".";
 import { ChatRepository } from "./chat";
 import { UserConfigRepository } from "./user-config";
@@ -20,17 +20,19 @@ export class UserRepository extends DB {
   }
 
   async getUserByName(name: User["name"]): PromiseUser {
-    return (await this.users.get(name)) as User;
+    return (await this.users.where("name").equals(name).first()) as User;
   }
 
-  async addUser(user: User): Promise<User> {
-    await this.users.add(user);
-    return user;
+  async addUser(user: UserPayload): Promise<User> {
+    await this.users.add(user as User);
+    const newUser = await this.getUserByName(user.name);
+    return newUser as User;
   }
 
   async updateUser(user: User): Promise<User> {
     await this.users.update(user.id, user);
-    return user;
+    const updatedUser = await this.getUserById(user.id);
+    return updatedUser as User;
   }
 
   async deleteUser(user: User): Promise<void> {
