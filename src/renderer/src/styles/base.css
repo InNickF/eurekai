@@ -1,9 +1,7 @@
 /* Global styles */
 
 body {
-  background-color: var(--color-ghost-base);
-  color: var(--color-text-base);
-  @apply relative;
+  @apply relative bg-ghost-base text-text-base;
 }
 
 /* Tailwind personalization */
@@ -13,14 +11,12 @@ body {
 
 ::-moz-selection,
 *::-moz-selection {
-  color: var(--primary-above-base) !important;
-  background: var(--color-primary) !important;
+  @apply bg-primary-base text-primary-above-base !important;
 }
 
 ::selection,
 *::selection {
-  color: var(--primary-above-base) !important;
-  background: var(--color-primary) !important;
+  @apply bg-primary-base text-primary-above-base !important;
 }
 
 html,

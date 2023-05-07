@@ -1,4 +1,4 @@
-import { Id } from "@renderer/types";
+import { User } from "@renderer/types";
 import { useQuery } from "@tanstack/react-query";
 import { getMe, getUsers } from "../api/users";
 import { queryKeys } from "../keys";
@@ -11,7 +11,7 @@ export const useUsers = () => {
   });
 };
 
-export const useUser = (userId: Id) => {
+export const useUser = (userId: User["id"]) => {
   return useQuery({
     ...queryKeys.users.detail(userId),
   });

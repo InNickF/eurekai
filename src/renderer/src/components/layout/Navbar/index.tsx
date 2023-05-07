@@ -1,13 +1,13 @@
 import { routes } from "@renderer/App";
 import { LogoutButton } from "@renderer/components/commons/LogoutButton";
-import { useCachedMe } from "@renderer/hooks/useCachedMe";
+import { useMe } from "@renderer/services/queries/users";
 import { FC } from "react";
 import { NavLink } from "react-router-dom";
 import "./index.css";
 
 export const Navbar: FC = () => {
   const finalRoutes = routes.filter((route) => route.path !== "/login");
-  const user = useCachedMe();
+  const { data: user } = useMe();
 
   return (
     <nav className="navbar">

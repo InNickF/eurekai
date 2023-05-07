@@ -25,8 +25,13 @@ export class UserRepository extends DB {
 
   async addUser(user: UserPayload): Promise<User> {
     await this.users.add(user as User);
-    const newUser = await this.getUserByName(user.name);
-    return newUser as User;
+    const newUser = (await this.getUserByName(user.name)) as User;
+    const userConfigRepository = new UserConfigRepository();
+    await userConfigRepository.addUserConfig({
+      userId: newUser.id,
+      apiKey: "",
+    });
+    return newUser;
   }
 
   async updateUser(user: User): Promise<User> {
@@ -39,7 +44,7 @@ export class UserRepository extends DB {
     await this.users.delete(user.id);
 
     const userConfig = new UserConfigRepository();
-    await userConfig.deleteUserConfig(user.id);
+    await userConfig.deleteUserConfigByUserId(user.id);
 
     const userChats = new ChatRepository();
     await userChats.deleteChatsByUserId(user.id);

@@ -1,7 +1,7 @@
 import { queryKeys } from "@renderer/services/keys";
 import {
-  useCreateUser,
-  useDeleteUser,
+  useCreateUserMutation,
+  useDeleteUserMutation,
 } from "@renderer/services/mutations/users";
 import { useUsers } from "@renderer/services/queries/users";
 import { User } from "@renderer/types";
@@ -12,20 +12,21 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
 export const UserSelector: FC = () => {
-  const { data: users, isLoading } = useUsers();
-
-  const { register, handleSubmit, reset } = useForm<User>();
   const queryClient = new QueryClient();
   const navigate = useNavigate();
 
-  const createUserMutation = useCreateUser({
+  const { data: users, isLoading } = useUsers();
+
+  const { register, handleSubmit, reset } = useForm<User>();
+
+  const createUserMutation = useCreateUserMutation({
     onSuccess: (user) => {
       reset();
       onSelect(user);
     },
   });
+  const deleteUserMutation = useDeleteUserMutation();
 
-  const deleteUserMutation = useDeleteUser();
   const onSubmit = (data: User) => {
     createUserMutation.mutate(data);
   };
@@ -55,13 +56,6 @@ export const UserSelector: FC = () => {
           </li>
         ))}
       </ul>
-      <button
-        onClick={() => {
-          navigate("/");
-        }}
-      >
-        go to home
-      </button>
     </>
   );
 };

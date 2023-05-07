@@ -8,6 +8,10 @@ export class UserConfigRepository extends DB {
     super();
   }
 
+  async getUserConfigs(): Promise<UserConfig[]> {
+    return await this.userConfigs.toArray();
+  }
+
   async getUserConfigByUserId(userId: User["id"]): PromiseUserConfig {
     return (await this.userConfigs
       .where("userId")
@@ -32,5 +36,10 @@ export class UserConfigRepository extends DB {
 
   async deleteUserConfig(userConfigId: UserConfig["id"]): Promise<void> {
     await this.userConfigs.delete(userConfigId);
+  }
+
+  async deleteUserConfigByUserId(userId: User["id"]): Promise<void> {
+    const userConfig = await this.getUserConfigByUserId(userId);
+    if (userConfig) await this.userConfigs.delete(userConfig.id);
   }
 }
