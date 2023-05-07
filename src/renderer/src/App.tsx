@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FC, LegacyRef, createRef } from "react";
 import {
   RouteObject,
@@ -7,6 +6,7 @@ import {
   useOutlet,
 } from "react-router-dom";
 import { RouterTransition } from "./components/layout/RouterTransition";
+import { ChatsPage } from "./pages/Chats";
 import { ConfigPage } from "./pages/Config";
 import { HomePage } from "./pages/Home";
 import { LoginPage } from "./pages/Login";
@@ -22,12 +22,12 @@ type CustomRouteObject = RouteObject & {
 
 export const routes: CustomRouteObject[] = [
   {
-    path: "/",
-    element: <HomePage />,
-    id: "home",
-    label: "Home",
+    path: "/chats",
+    element: <ChatsPage />,
+    id: "chats",
+    label: "Chats",
     nodeRef: createRef(),
-    layout: HomePage.layout,
+    layout: ChatsPage.layout,
   },
   {
     path: "/config",
@@ -44,6 +44,14 @@ export const routes: CustomRouteObject[] = [
     label: "Login",
     nodeRef: createRef(),
     layout: LoginPage.layout,
+  },
+  {
+    path: "/",
+    element: <HomePage />,
+    id: "home",
+    label: "New chat",
+    nodeRef: createRef(),
+    layout: HomePage.layout,
   },
 ];
 
