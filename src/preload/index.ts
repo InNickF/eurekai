@@ -1,8 +1,20 @@
-import { contextBridge } from "electron";
 import { electronAPI } from "@electron-toolkit/preload";
+import { contextBridge } from "electron";
+import {
+  GetAudioFromVideoArgs,
+  getAudioFromVideo,
+} from "../main/services/getAudioFromVideo";
 
 // Custom APIs for renderer
-const api = {};
+export const api = {
+  getAudioFromVideo: async (args: GetAudioFromVideoArgs) => {
+    const result = (await electronAPI.ipcRenderer.invoke(
+      "get-audio-from-video",
+      args
+    )) as ReturnType<typeof getAudioFromVideo>;
+    return result;
+  },
+};
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise

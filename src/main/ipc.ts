@@ -1,8 +1,6 @@
 import { ipcMain } from "electron";
+import { getAudioFromVideo } from "./services/getAudioFromVideo";
 
 export const initIPC = (): void => {
-  ipcMain.handle("ping", async (_, ...args) => {
-    console.log("ping", args);
-    return "pong";
-  });
+  ipcMain.handle("get-audio-from-video", getAudioFromVideo);
 };
