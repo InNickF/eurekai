@@ -1,14 +1,14 @@
 import { routes } from "@renderer/App";
 import { LogoutButton } from "@renderer/components/commons/LogoutButton";
-import { userAtom } from "@renderer/state/users";
-import { useAtom } from "jotai";
+import { useCachedMe } from "@renderer/hooks/useCachedMe";
 import { FC } from "react";
 import { NavLink } from "react-router-dom";
 import "./index.css";
 
 export const Navbar: FC = () => {
-  const [user] = useAtom(userAtom);
   const finalRoutes = routes.filter((route) => route.path !== "/login");
+  const user = useCachedMe();
+
   return (
     <nav className="navbar">
       <section>

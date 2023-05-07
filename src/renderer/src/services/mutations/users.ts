@@ -26,6 +26,7 @@ export const useUpdateUser = () => {
     mutationFn: updateUser,
     onSuccess(data) {
       queryClient.invalidateQueries(queryKeys.users.detail(data.id));
+      queryClient.invalidateQueries(queryKeys.users.me.queryKey);
     },
     onSettled() {
       queryClient.invalidateQueries(queryKeys.users.all);

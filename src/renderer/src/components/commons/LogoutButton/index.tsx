@@ -1,9 +1,16 @@
-import { useSetAtom } from "jotai/react";
-import { userAtom } from "@renderer/state/users";
+import { clearUserSession } from "@renderer/utils";
+import { useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 export const LogoutButton = () => {
-  const setUser = useSetAtom(userAtom);
-  const logout = () => setUser(null);
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  const logout = () => {
+    clearUserSession();
+    queryClient.clear();
+    navigate("/login");
+  };
 
   return <button onClick={logout}>Logout</button>;
 };

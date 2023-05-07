@@ -8,4 +8,5 @@ export const users = createQueryKeys("users", {
     queryKey: [userId],
     queryFn: () => getUser(userId),
   }),
+  me: null,
 });

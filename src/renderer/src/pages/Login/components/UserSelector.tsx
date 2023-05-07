@@ -1,22 +1,27 @@
+import { queryKeys } from "@renderer/services/keys";
 import {
   useCreateUser,
   useDeleteUser,
 } from "@renderer/services/mutations/users";
 import { useUsers } from "@renderer/services/queries/users";
-import { userAtom } from "@renderer/state/users";
 import { User } from "@renderer/types";
-import { useSetAtom } from "jotai/react";
+import { setUserSession } from "@renderer/utils";
+import { QueryClient } from "@tanstack/react-query";
 import { FC } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 export const UserSelector: FC = () => {
   const { data: users, isLoading } = useUsers();
+
   const { register, handleSubmit, reset } = useForm<User>();
-  const setUser = useSetAtom(userAtom);
+  const queryClient = new QueryClient();
+  const navigate = useNavigate();
+
   const createUserMutation = useCreateUser({
     onSuccess: (user) => {
       reset();
-      // setUser(user);
+      onSelect(user);
     },
   });
 
@@ -30,7 +35,9 @@ export const UserSelector: FC = () => {
   };
 
   const onSelect = (user: User) => {
-    setUser(user);
+    setUserSession(user.id);
+    queryClient.setQueryData(queryKeys.users.me.queryKey, user);
+    navigate("/");
   };
 
   return (
@@ -48,6 +55,13 @@ export const UserSelector: FC = () => {
           </li>
         ))}
       </ul>
+      <button
+        onClick={() => {
+          navigate("/");
+        }}
+      >
+        go to home
+      </button>
     </>
   );
 };
