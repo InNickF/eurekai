@@ -47,8 +47,8 @@ export const ChatFromVideoForm = () => {
         accept=".mp4,.mkv,.avi,.mov,.webm"
       />
       <br />
-      {state.isLoading && <p>loading...</p>}
       <br />
+      {state.isLoading && <p>loading...</p>}
       {state.message && <p>{state.message}</p>}
     </>
   );
