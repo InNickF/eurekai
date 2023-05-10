@@ -1,8 +1,9 @@
 import { z } from "zod";
-import { CHAT_TYPES, MESSAGE_ROLES } from "./utils";
+import { CHAT_TYPES, PROMPT_TYPES, MESSAGE_ROLES } from "@renderer/utils";
 
 export const ChatTypeSchema = z.enum(CHAT_TYPES);
 export const MessageRoleSchema = z.enum(MESSAGE_ROLES);
+export const PromptTypeSchema = z.enum(PROMPT_TYPES);
 export const IdSchema = z.number();
 
 export const UserPayloadSchema = z.object({
@@ -17,8 +18,13 @@ export const UserSchema = z
 
 export const ChatPayloadSchema = z.object({
   userId: UserSchema.shape.id,
-  systemMessage: z.string().optional(),
-  serializedData: z.string().optional(),
+  title: z.string().nullable(),
+  description: z.string().nullable(),
+  context: z.string().nullable(),
+  speakersQuantity: z.number().nullable(),
+  systemMessage: z.string().nullable(),
+  serializedData: z.string().nullable(),
+  initialized: z.boolean().nullable(),
   type: ChatTypeSchema,
 });
 
@@ -44,10 +50,16 @@ export const MessageSchema = z
   })
   .merge(MessagePayloadSchema);
 
+export const ChatWithMessagesSchema = ChatSchema.merge(
+  z.object({
+    messages: z.array(MessageSchema),
+  })
+);
+
 export const PromptCategoryPayloadSchema = z.object({
-  userId: UserSchema.shape.id,
-  label: z.string(),
-  description: z.string().optional(),
+  userId: UserSchema.shape.id.nullable(),
+  title: z.string(),
+  description: z.string().nullable(),
 });
 
 export const PromptCategorySchema = z
@@ -58,27 +70,29 @@ export const PromptCategorySchema = z
   .merge(PromptCategoryPayloadSchema);
 
 export const PromptPayloadSchema = z.object({
-  userId: UserSchema.shape.id,
-  categoryId: PromptCategorySchema.shape.id.optional(),
-  label: z.string(),
+  userId: UserSchema.shape.id.nullable(),
+  categoryId: PromptCategorySchema.shape.id.nullable(),
+  title: z.string().nullable(),
   content: z.string(),
+  type: PromptTypeSchema,
 });
 
 export const PromptSchema = z
   .object({
     id: IdSchema,
+    createdAt: z.date(),
   })
   .merge(PromptPayloadSchema);
 
 // The session is in the renderer side.
 // export const ConfigSchema = z.object({
 //   id: IdSchema.nullish(),
-//   currentUserId: UserSchema.shape.id.optional(),
+//   currentUserId: UserSchema.shape.id.nullable(),
 // });
 
 export const UserConfigPayloadSchema = z.object({
   userId: UserSchema.shape.id,
-  apiKey: z.string().optional(),
+  apiKey: z.string().nullable(),
 });
 
 export const UserConfigSchema = z

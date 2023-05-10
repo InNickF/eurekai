@@ -1,4 +1,4 @@
-import { LoginLayout } from "@renderer/components/layout/LoginLayout";
+import { LoginLayout } from "@renderer/ui/components/layout/LoginLayout";
 import { Page } from "@renderer/types";
 import { FC } from "react";
 import { UserSelector } from "./components/UserSelector";

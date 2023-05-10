@@ -1,4 +1,4 @@
-import { AppLayout } from "@renderer/components/layout/AppLayout";
+import { AppLayout } from "@renderer/ui/components/layout/AppLayout";
 import { useUserConfigByUserId } from "@renderer/services/queries/user-configs";
 import { useMe } from "@renderer/services/queries/users";
 import { Page } from "@renderer/types";

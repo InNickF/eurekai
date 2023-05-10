@@ -72,7 +72,7 @@ const reducer: Reducer = (state, action) => {
 };
 
 export const useLoadingChatFile = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [loaderState, dispatch] = useReducer(reducer, initialState);
 
   const initLoading = (message: InitLoadingReducerCreateAction["payload"]) => {
     dispatch({
@@ -81,23 +81,25 @@ export const useLoadingChatFile = () => {
     });
   };
 
-  const setMessage = (message: SetMessageReducerCreateAction["payload"]) => {
+  const setLoaderMessage = (
+    message: SetMessageReducerCreateAction["payload"]
+  ) => {
     dispatch({
       type: reducerActionTypes.SET_MESSAGE,
       payload: message,
     });
   };
 
-  const reset = () => {
+  const resetLoader = () => {
     dispatch({
       type: reducerActionTypes.RESET,
     });
   };
 
   return {
-    state,
+    loaderState,
     initLoading,
-    setMessage,
-    reset,
+    setLoaderMessage,
+    resetLoader,
   };
 };

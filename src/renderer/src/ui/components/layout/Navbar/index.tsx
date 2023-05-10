@@ -1,5 +1,5 @@
 import { routes } from "@renderer/App";
-import { LogoutButton } from "@renderer/components/commons/LogoutButton";
+import { LogoutButton } from "@renderer/ui/components/commons/LogoutButton";
 import { useMe } from "@renderer/services/queries/users";
 import { FC } from "react";
 import { NavLink } from "react-router-dom";

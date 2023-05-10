@@ -1,4 +1,9 @@
 import {
+  initialComplexPrompts,
+  initialSimplePrompts,
+} from "@renderer/data/initial-prompts";
+import { initialPromptCategories } from "@renderer/data/initital-prompt-categories";
+import {
   ChatSchema,
   MessageSchema,
   PromptCategorySchema,
@@ -8,10 +13,10 @@ import {
 } from "@renderer/schemas";
 import {
   Chat,
+  DBStore,
   Message,
   Prompt,
   PromptCategory,
-  DBStore,
   User,
   UserConfig,
 } from "@renderer/types";
@@ -66,13 +71,49 @@ export class DB extends Dexie {
       ...promptCategoriesStore,
       ...promptsStore,
     });
-    // this.config
-    //   .count()
-    //   .then((count) => count > 0)
-    //   .then((hasConfig) => {
-    //     if (!hasConfig) {
-    //       this.config.add({ id: 1, currentUserId: null });
-    //     }
-    //   });
+
+    this.promptCategories
+      .count()
+      .then((count) => count > 0)
+      .then((hasInitialCategories) => {
+        if (!hasInitialCategories) {
+          const categories = initialPromptCategories;
+          categories.forEach((category) => {
+            this.promptCategories.add(category as PromptCategory);
+          });
+        }
+      })
+      .then(() => {
+        this.promptCategories
+          .where("title")
+          .equals("System")
+          .first()
+          .then((systemCategory) => {
+            this.prompts
+              .count()
+              .then((count) => count > 0)
+              .then((hasInitialPrompts) => {
+                if (!hasInitialPrompts) {
+                  const simplePrompts = initialSimplePrompts.map((prompt) => ({
+                    ...prompt,
+                    categoryId: systemCategory?.id,
+                  }));
+
+                  const complexPrompts = initialComplexPrompts.map(
+                    (prompt) => ({
+                      ...prompt,
+                      categoryId: systemCategory?.id,
+                    })
+                  );
+
+                  const prompts = [...complexPrompts, ...simplePrompts];
+
+                  prompts.forEach((prompt) => {
+                    this.prompts.add(prompt as Prompt);
+                  });
+                }
+              });
+          });
+      });
   }
 }

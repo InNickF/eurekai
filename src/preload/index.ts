@@ -14,6 +14,9 @@ export const api = {
     )) as ReturnType<typeof getAudioFromVideo>;
     return result;
   },
+  clearAllGeneratedAudioFiles: async () => {
+    await electronAPI.ipcRenderer.send("clear-all-generated-audio-files");
+  },
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to

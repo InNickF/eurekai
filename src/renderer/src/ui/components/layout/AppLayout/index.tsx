@@ -1,4 +1,4 @@
-import { Navbar } from "@renderer/components/layout/Navbar";
+import { Navbar } from "@renderer/ui/components/layout/Navbar";
 import { FC, PropsWithChildren } from "react";
 import { AuthLayout } from "../AuthLayout";
 import { AppContainer } from "./components/AppContainer";

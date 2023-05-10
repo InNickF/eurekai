@@ -5,12 +5,12 @@ import {
   useLocation,
   useOutlet,
 } from "react-router-dom";
-import { RouterTransition } from "./components/layout/RouterTransition";
-import { ChatsPage } from "./pages/Chats";
-import { ConfigPage } from "./pages/Config";
-import { HomePage } from "./pages/Home";
-import { LoginPage } from "./pages/Login";
-import { Layout } from "./types";
+import { RouterTransition } from "@renderer/ui/components/layout/RouterTransition";
+import { ChatsPage } from "@renderer/ui/pages/Chats";
+import { ConfigPage } from "@renderer/ui/pages/Config";
+import { HomePage } from "@renderer/ui/pages/Home";
+import { LoginPage } from "@renderer/ui/pages/Login";
+import { Layout } from "@renderer/types";
 
 type CustomRouteObject = RouteObject & {
   label?: string;

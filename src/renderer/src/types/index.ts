@@ -1,8 +1,8 @@
-import { z } from "zod";
 import {
   ChatPayloadSchema,
   ChatSchema,
   ChatTypeSchema,
+  ChatWithMessagesSchema,
   IdSchema,
   MessagePayloadSchema,
   MessageRoleSchema,
@@ -15,7 +15,8 @@ import {
   UserConfigSchema,
   UserPayloadSchema,
   UserSchema,
-} from "./schemas";
+} from "@renderer/schemas";
+import { z } from "zod";
 
 export type DBStore = {
   [key: string]: string;
@@ -45,6 +46,10 @@ export type User = z.infer<typeof UserSchema>;
 export type UserPayload = z.infer<typeof UserPayloadSchema>;
 
 // export type Config = z.infer<typeof ConfigSchema>;
+
+// END DB Models and it's payloads
+
+export type ChatWithMessages = z.infer<typeof ChatWithMessagesSchema>;
 
 export type Layout = (
   page: React.ReactElement<

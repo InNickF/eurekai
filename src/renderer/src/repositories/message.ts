@@ -21,10 +21,10 @@ export class MessageRepository extends DB {
   }
 
   async getMessagesByChatId(chatId: Message["chatId"]): Promise<Message[]> {
-    const messages = (await this.messages
+    const messages = await this.messages
       .where("chatId")
       .equals(chatId)
-      .toArray()) as Message[];
+      .toArray();
 
     return this.orderByDate(messages);
   }

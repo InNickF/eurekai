@@ -1,8 +1,8 @@
-import { Chat, ChatPayload } from "@renderer/types";
+import { Chat, ChatPayload, ChatWithMessages } from "@renderer/types";
 import { DB } from ".";
 import { MessageRepository } from "./message";
 
-type PromiseChat = Promise<Chat | null>;
+type PromiseChat = Promise<ChatWithMessages | null>;
 
 export class ChatRepository extends DB {
   constructor() {
@@ -14,7 +14,19 @@ export class ChatRepository extends DB {
   }
 
   async getChatById(id: Chat["id"]): PromiseChat {
-    return (await this.chats.get(id)) as Chat;
+    const chat = await this.chats.get(id);
+    if (!chat) return null;
+    const messageRepository = new MessageRepository();
+    const messages = await messageRepository.getMessagesByChatId(chat.id);
+    return { ...chat, messages } as ChatWithMessages;
+  }
+
+  async getChatByUserId(id: Chat["userId"]): PromiseChat {
+    const chat = await this.chats.where("userId").equals(id).first();
+    if (!chat) return null;
+    const messageRepository = new MessageRepository();
+    const messages = await messageRepository.getMessagesByChatId(chat.id);
+    return { ...chat, messages } as ChatWithMessages;
   }
 
   async getChatsByUserId(userId: Chat["userId"]): Promise<Chat[]> {

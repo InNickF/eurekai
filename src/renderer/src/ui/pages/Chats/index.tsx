@@ -1,4 +1,4 @@
-import { AppLayout } from "@renderer/components/layout/AppLayout";
+import { AppLayout } from "@renderer/ui/components/layout/AppLayout";
 import { Page } from "@renderer/types";
 import { FC } from "react";
 
