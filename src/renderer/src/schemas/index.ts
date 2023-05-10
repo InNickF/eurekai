@@ -5,6 +5,12 @@ export const ChatTypeSchema = z.enum(CHAT_TYPES);
 export const MessageRoleSchema = z.enum(MESSAGE_ROLES);
 export const PromptTypeSchema = z.enum(PROMPT_TYPES);
 export const IdSchema = z.number();
+export const CreatedAtSchema = z.object({
+  createdAt: z.date(),
+});
+export const UpdatedAtSchema = z.object({
+  updatedAt: z.date(),
+});
 
 export const UserPayloadSchema = z.object({
   name: z.string(),
@@ -24,6 +30,7 @@ export const ChatPayloadSchema = z.object({
   speakersQuantity: z.number().nullable(),
   systemMessage: z.string().nullable(),
   serializedData: z.string().nullable(),
+  sourceFileName: z.string().nullable(),
   initialized: z.boolean().nullable(),
   type: ChatTypeSchema,
 });
@@ -31,14 +38,15 @@ export const ChatPayloadSchema = z.object({
 export const ChatSchema = z
   .object({
     id: IdSchema,
-    createdAt: z.date(),
-    updatedAt: z.date(),
   })
-  .merge(ChatPayloadSchema);
+  .merge(ChatPayloadSchema)
+  .merge(CreatedAtSchema)
+  .merge(UpdatedAtSchema);
 
 export const MessagePayloadSchema = z.object({
   userId: UserSchema.shape.id,
   chatId: ChatSchema.shape.id,
+  visible: z.boolean().nullish(),
   content: z.string(),
   role: MessageRoleSchema,
 });
@@ -46,9 +54,9 @@ export const MessagePayloadSchema = z.object({
 export const MessageSchema = z
   .object({
     id: IdSchema,
-    createdAt: z.date(),
   })
-  .merge(MessagePayloadSchema);
+  .merge(MessagePayloadSchema)
+  .merge(CreatedAtSchema);
 
 export const ChatWithMessagesSchema = ChatSchema.merge(
   z.object({
@@ -65,9 +73,9 @@ export const PromptCategoryPayloadSchema = z.object({
 export const PromptCategorySchema = z
   .object({
     id: IdSchema,
-    createdAt: z.date(),
   })
-  .merge(PromptCategoryPayloadSchema);
+  .merge(PromptCategoryPayloadSchema)
+  .merge(CreatedAtSchema);
 
 export const PromptPayloadSchema = z.object({
   userId: UserSchema.shape.id.nullable(),
@@ -80,9 +88,9 @@ export const PromptPayloadSchema = z.object({
 export const PromptSchema = z
   .object({
     id: IdSchema,
-    createdAt: z.date(),
   })
-  .merge(PromptPayloadSchema);
+  .merge(PromptPayloadSchema)
+  .merge(CreatedAtSchema);
 
 // The session is in the renderer side.
 // export const ConfigSchema = z.object({

@@ -1,7 +1,8 @@
 import { Message, MessagePayload } from "@renderer/types";
 import { DB } from ".";
+import { NotFoundError, getCreatedAt } from "@renderer/utils";
 
-type PromiseMessage = Promise<Message | null>;
+type PromiseMessage = Promise<Message>;
 
 export class MessageRepository extends DB {
   constructor() {
@@ -15,8 +16,7 @@ export class MessageRepository extends DB {
   }
 
   async getAllMessages(): Promise<Message[]> {
-    const messages = (await this.messages.toArray()) as Message[];
-
+    const messages = await this.messages.toArray();
     return this.orderByDate(messages);
   }
 
@@ -30,20 +30,26 @@ export class MessageRepository extends DB {
   }
 
   async getMessagesByUserId(userId: Message["userId"]): Promise<Message[]> {
-    const messages = (await this.messages
+    const messages = await this.messages
       .where("userId")
       .equals(userId)
-      .toArray()) as Message[];
+      .toArray();
 
     return this.orderByDate(messages);
   }
 
   async getMessageById(id: Message["id"]): PromiseMessage {
-    return (await this.messages.get(id)) as Message;
+    const message = await this.messages.get(id);
+    if (!message) throw new NotFoundError();
+
+    return message;
   }
 
   async addMessage(message: MessagePayload): Promise<Message> {
-    const messageId = (await this.messages.add(message as Message)) as number;
+    const messageId = (await this.messages.add({
+      ...message,
+      createdAt: getCreatedAt(),
+    } as Message)) as number;
     const addedMessage = await this.getMessageById(messageId);
     return addedMessage as Message;
   }

@@ -3,8 +3,9 @@ import { DB } from ".";
 import { ChatRepository } from "./chat";
 import { UserConfigRepository } from "./user-config";
 import { PromptCategoryRepository } from "./prompt-category";
+import { NotFoundError } from "@renderer/utils";
 
-type PromiseUser = Promise<User | null>;
+type PromiseUser = Promise<User>;
 
 export class UserRepository extends DB {
   constructor() {
@@ -16,11 +17,15 @@ export class UserRepository extends DB {
   }
 
   async getUserById(id: User["id"]): PromiseUser {
-    return (await this.users.get(id)) as User;
+    const user = await this.users.get(id);
+    if (!user) throw new NotFoundError();
+    return user;
   }
 
   async getUserByName(name: User["name"]): PromiseUser {
-    return (await this.users.where("name").equals(name).first()) as User;
+    const user = await this.users.where("name").equals(name).first();
+    if (!user) throw new NotFoundError();
+    return user;
   }
 
   async addUser(user: UserPayload): Promise<User> {

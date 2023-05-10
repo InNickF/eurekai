@@ -1,7 +1,8 @@
 import { User, UserConfig, UserConfigPayload } from "@renderer/types";
 import { DB } from ".";
+import { NotFoundError } from "@renderer/utils";
 
-type PromiseUserConfig = Promise<UserConfig | null>;
+type PromiseUserConfig = Promise<UserConfig>;
 
 export class UserConfigRepository extends DB {
   constructor() {
@@ -13,14 +14,18 @@ export class UserConfigRepository extends DB {
   }
 
   async getUserConfigByUserId(userId: User["id"]): PromiseUserConfig {
-    return (await this.userConfigs
+    const userConfig = await this.userConfigs
       .where("userId")
       .equals(userId)
-      .first()) as UserConfig;
+      .first();
+    if (!userConfig) throw new NotFoundError();
+    return userConfig;
   }
 
   async getUserConfigById(id: UserConfig["id"]): PromiseUserConfig {
-    return (await this.userConfigs.get(id)) as UserConfig;
+    const prompt = await this.userConfigs.get(id);
+    if (!prompt) throw new NotFoundError();
+    return prompt;
   }
 
   async addUserConfig(userConfig: UserConfigPayload): Promise<UserConfig> {

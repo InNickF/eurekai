@@ -1,21 +1,30 @@
 import { getAudioFromVideo } from "@renderer/services/api/files";
+import { usePromptsByUserId } from "@renderer/services/queries/prompts";
 import { useUserConfigByUserId } from "@renderer/services/queries/user-configs";
 import { useMe } from "@renderer/services/queries/users";
-import { User } from "@renderer/types";
+import { ChatPayload } from "@renderer/types";
+import { createChatWithMessages } from "@renderer/utils/createChatWithMessages";
+import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { useLoadingChatFile } from "../../hooks/useLoadingChatFile";
+import { queryKeys } from "@renderer/services/keys";
 
 interface ChatFromVideoFormFields {
   video: FileList;
   context: string;
   speakersQuantity: number;
+  initialPrompt: string;
 }
 
 export const ChatFromVideoForm = () => {
   const { initLoading, resetLoader, setLoaderMessage, loaderState } =
     useLoadingChatFile();
   const { data: user } = useMe();
-  const { data: userConfig } = useUserConfigByUserId(user?.id as User["id"]);
+  const { data: userConfig } = useUserConfigByUserId({ userId: user?.id! });
+  const { data: initialPrompts } = usePromptsByUserId({ userId: user?.id! });
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -29,7 +38,7 @@ export const ChatFromVideoForm = () => {
   const getTranscriptionFromVideo = async (video: File) => {
     if (!userConfig || !userConfig.apiKey) return;
 
-    initLoading("Getting audio from video.");
+    setLoaderMessage("Getting audio from video.");
     const audioResponse = await getAudioFromVideo(video);
 
     setLoaderMessage("Sending audio to get transcription.");
@@ -38,20 +47,54 @@ export const ChatFromVideoForm = () => {
     //   userConfig?.apiKey!
     // );
 
-    resetLoader();
+    const transcription = "This is a transcription.";
     return {
       ...audioResponse,
-      // transcriptionResponse,
+      transcription,
     };
   };
 
-  const onSubmit = async (data: ChatFromVideoFormFields) => {
-    console.log("data", data);
+  const createChat = async (chat: ChatPayload, initialPrompt: string) => {
+    setLoaderMessage("Creating chat.");
+    const chatResponse = await createChatWithMessages({
+      chat,
+      initialPrompt,
+    });
+    return chatResponse;
+  };
 
+  const onSubmit = async (data: ChatFromVideoFormFields) => {
+    initLoading();
     const transcriptionResponse = await getTranscriptionFromVideo(
       data.video[0]
     );
-    console.log("response", transcriptionResponse);
+
+    if (!transcriptionResponse) return;
+    if (!user?.id) return;
+
+    const chat: ChatPayload = {
+      context: data.context,
+      speakersQuantity: data.speakersQuantity,
+      type: "video",
+      userId: user.id,
+      description: null,
+      initialized: false,
+      serializedData: transcriptionResponse.transcription,
+      sourceFileName: transcriptionResponse.videoName,
+      systemMessage: null,
+      title: null,
+    };
+
+    const createdChat = await createChat(chat, data.initialPrompt);
+    resetLoader();
+
+    if (createdChat) {
+      queryClient.invalidateQueries([
+        queryKeys.chats.all.queryKey,
+        queryKeys.chats.allByUserId._def,
+      ]);
+      navigate(`/chats/${createdChat.id}`);
+    }
   };
 
   return (
@@ -80,11 +123,27 @@ export const ChatFromVideoForm = () => {
         <input
           {...register("speakersQuantity", {
             required: true,
+            valueAsNumber: true,
             min: 1,
           })}
           type="number"
           step={1}
         />
+        <br />
+        <br />
+        <label htmlFor="initialPrompt">Initial prompt</label>
+        <select
+          className="w-48"
+          {...register("initialPrompt", {
+            required: true,
+          })}
+        >
+          {initialPrompts?.map((prompt) => (
+            <option key={prompt.id} value={prompt.content}>
+              {prompt.title || prompt.content}
+            </option>
+          ))}
+        </select>
         <br />
         <br />
         <button onClick={handleSubmit(onSubmit)}>Submit</button>

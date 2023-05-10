@@ -1,7 +1,8 @@
 import { Prompt, PromptCategory, PromptPayload } from "@renderer/types";
 import { DB } from ".";
+import { NotFoundError, getCreatedAt } from "@renderer/utils";
 
-type PromisePrompt = Promise<Prompt | null>;
+type PromisePrompt = Promise<Prompt>;
 
 export class PromptRepository extends DB {
   constructor() {
@@ -13,27 +14,36 @@ export class PromptRepository extends DB {
   }
 
   async getPromptById(id: Prompt["id"]): PromisePrompt {
-    return (await this.prompts.get(id)) as Prompt;
+    const prompt = await this.prompts.get(id);
+    if (!prompt) throw new NotFoundError();
+    return prompt;
+  }
+
+  async getPromptByUserId(userId: Prompt["userId"]): PromisePrompt {
+    if (!userId) throw new NotFoundError();
+    const prompt = await this.prompts.get(userId);
+    if (!prompt) throw new NotFoundError();
+    return prompt;
   }
 
   async getPromptsByUserId(userId: Prompt["userId"]): Promise<Prompt[]> {
-    return (await this.prompts
-      .where("userId")
-      .equals(userId)
-      .toArray()) as Prompt[];
+    if (!userId) throw new NotFoundError();
+    return await this.prompts
+      .filter((prompt) => prompt.userId === userId || prompt.userId === null)
+      .toArray();
   }
 
   async getPromptsByCategoryId(
     categoryId: PromptCategory["id"]
   ): Promise<Prompt[]> {
-    return (await this.prompts
-      .where("categoryId")
-      .equals(categoryId)
-      .toArray()) as Prompt[];
+    return await this.prompts.where("categoryId").equals(categoryId).toArray();
   }
 
   async addPrompt(prompt: PromptPayload): Promise<Prompt> {
-    const promptId = (await this.prompts.add(prompt as Prompt)) as number;
+    const promptId = (await this.prompts.add({
+      ...prompt,
+      createdAt: getCreatedAt(),
+    } as Prompt)) as number;
     const addedPrompt = await this.getPromptById(promptId);
     return addedPrompt as Prompt;
   }

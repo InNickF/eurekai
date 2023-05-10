@@ -7,9 +7,9 @@ import { UserConfigEditor } from "./components/UserConfigEditor";
 
 export const ConfigPage: Page<FC> = () => {
   const { data: user, isLoading: isLoadingUser } = useMe();
-  const { data: config, isLoading: isLoadingConfig } = useUserConfigByUserId(
-    user?.id!
-  );
+  const { data: config, isLoading: isLoadingConfig } = useUserConfigByUserId({
+    userId: user?.id!,
+  });
   const isLoading = isLoadingUser && isLoadingConfig;
   return (
     <section>

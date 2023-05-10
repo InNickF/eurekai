@@ -1,3 +1,9 @@
+import { Layout } from "@renderer/types";
+import { RouterTransition } from "@renderer/ui/components/layout/RouterTransition";
+import { ChatsPage } from "@renderer/ui/pages/Chats";
+import { ConfigPage } from "@renderer/ui/pages/Config";
+import { HomePage } from "@renderer/ui/pages/Home";
+import { LoginPage } from "@renderer/ui/pages/Login";
 import { FC, LegacyRef, createRef } from "react";
 import {
   RouteObject,
@@ -5,12 +11,8 @@ import {
   useLocation,
   useOutlet,
 } from "react-router-dom";
-import { RouterTransition } from "@renderer/ui/components/layout/RouterTransition";
-import { ChatsPage } from "@renderer/ui/pages/Chats";
-import { ConfigPage } from "@renderer/ui/pages/Config";
-import { HomePage } from "@renderer/ui/pages/Home";
-import { LoginPage } from "@renderer/ui/pages/Login";
-import { Layout } from "@renderer/types";
+import { ChatPage } from "./ui/pages/Chat";
+import { ErrorPage } from "./ui/pages/ErrorPage";
 
 type CustomRouteObject = RouteObject & {
   label?: string;
@@ -28,6 +30,16 @@ export const routes: CustomRouteObject[] = [
     label: "Chats",
     nodeRef: createRef(),
     layout: ChatsPage.layout,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/chats/:chatId",
+    element: <ChatPage />,
+    id: "chat",
+    label: "Chat",
+    nodeRef: createRef(),
+    layout: ChatPage.layout,
+    errorElement: <ErrorPage />,
   },
   {
     path: "/config",
@@ -36,6 +48,7 @@ export const routes: CustomRouteObject[] = [
     label: "Config",
     nodeRef: createRef(),
     layout: ConfigPage.layout,
+    errorElement: <ErrorPage />,
   },
   {
     path: "/login",
@@ -44,6 +57,7 @@ export const routes: CustomRouteObject[] = [
     label: "Login",
     nodeRef: createRef(),
     layout: LoginPage.layout,
+    errorElement: <ErrorPage />,
   },
   {
     path: "/",
@@ -52,16 +66,21 @@ export const routes: CustomRouteObject[] = [
     label: "New chat",
     nodeRef: createRef(),
     layout: HomePage.layout,
+    errorElement: <ErrorPage />,
   },
 ];
+
+const dynamicPaths = [{ match: "/chats/", value: "/chats/:chatId" }];
 
 export const App: FC = () => {
   const currentOutlet = useOutlet();
   const location = useLocation();
 
-  const layout = routes.find(
-    (route) => route.path === location.pathname
-  )?.layout;
+  const pathToMatch =
+    dynamicPaths.find((path) => location.pathname.includes(path.match))
+      ?.value || location.pathname;
+
+  const layout = routes.find((route) => route.path === pathToMatch)?.layout;
 
   const renderLayout: Layout = layout ?? ((page) => page);
 

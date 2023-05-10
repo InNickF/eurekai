@@ -20,7 +20,7 @@ import {
   User,
   UserConfig,
 } from "@renderer/types";
-import { schemaToString } from "@renderer/utils";
+import { getCreatedAt, schemaToString } from "@renderer/utils";
 import Dexie, { Table } from "dexie";
 
 const usersStore: DBStore = {
@@ -79,7 +79,10 @@ export class DB extends Dexie {
         if (!hasInitialCategories) {
           const categories = initialPromptCategories;
           categories.forEach((category) => {
-            this.promptCategories.add(category as PromptCategory);
+            this.promptCategories.add({
+              ...category,
+              createdAt: getCreatedAt(),
+            } as PromptCategory);
           });
         }
       })
@@ -109,7 +112,10 @@ export class DB extends Dexie {
                   const prompts = [...complexPrompts, ...simplePrompts];
 
                   prompts.forEach((prompt) => {
-                    this.prompts.add(prompt as Prompt);
+                    this.prompts.add({
+                      ...prompt,
+                      createdAt: getCreatedAt(),
+                    } as Prompt);
                   });
                 }
               });

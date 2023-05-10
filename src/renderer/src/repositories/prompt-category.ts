@@ -1,8 +1,9 @@
 import { PromptCategory, PromptCategoryPayload } from "@renderer/types";
 import { DB } from ".";
 import { PromptRepository } from "./prompt";
+import { NotFoundError, getCreatedAt } from "@renderer/utils";
 
-type PromisePromptCategory = Promise<PromptCategory | null>;
+type PromisePromptCategory = Promise<PromptCategory>;
 
 export class PromptCategoryRepository extends DB {
   constructor() {
@@ -14,24 +15,25 @@ export class PromptCategoryRepository extends DB {
   }
 
   async getPromptCategoryById(id: PromptCategory["id"]): PromisePromptCategory {
-    return (await this.promptCategories.get(id)) as PromptCategory;
+    const prompt = await this.promptCategories.get(id);
+    if (!prompt) throw new NotFoundError();
+    return prompt;
   }
 
   async getPromptCategoriesByUserId(
     userId: PromptCategory["userId"]
   ): Promise<PromptCategory[]> {
-    return (await this.promptCategories
-      .where("userId")
-      .equals(userId)
-      .toArray()) as PromptCategory[];
+    if (!userId) throw new NotFoundError();
+    return await this.promptCategories.where("userId").equals(userId).toArray();
   }
 
   async addPromptCategory(
     promptCategory: PromptCategoryPayload
   ): Promise<PromptCategory> {
-    const promptCategoryId = (await this.promptCategories.add(
-      promptCategory as PromptCategory
-    )) as number;
+    const promptCategoryId = (await this.promptCategories.add({
+      ...promptCategory,
+      createdAt: getCreatedAt(),
+    } as PromptCategory)) as number;
 
     const addedPromptCategory = await this.getPromptCategoryById(
       promptCategoryId

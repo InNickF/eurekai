@@ -3,6 +3,7 @@ import {
   ChatSchema,
   ChatTypeSchema,
   ChatWithMessagesSchema,
+  CreatedAtSchema,
   IdSchema,
   MessagePayloadSchema,
   MessageRoleSchema,
@@ -11,6 +12,7 @@ import {
   PromptCategorySchema,
   PromptPayloadSchema,
   PromptSchema,
+  UpdatedAtSchema,
   UserConfigPayloadSchema,
   UserConfigSchema,
   UserPayloadSchema,
@@ -25,6 +27,9 @@ export type DBStore = {
 export type Id = z.infer<typeof IdSchema>;
 export type ChatType = z.infer<typeof ChatTypeSchema>;
 export type MessageRole = z.infer<typeof MessageRoleSchema>;
+
+export type CreatedAt = z.infer<typeof CreatedAtSchema>;
+export type UpdatedAt = z.infer<typeof UpdatedAtSchema>;
 
 // DB Models and it's payloads
 export type Chat = z.infer<typeof ChatSchema>;

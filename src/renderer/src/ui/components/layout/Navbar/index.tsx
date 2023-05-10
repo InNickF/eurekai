@@ -6,7 +6,10 @@ import { NavLink } from "react-router-dom";
 import "./index.css";
 
 export const Navbar: FC = () => {
-  const finalRoutes = routes.filter((route) => route.path !== "/login");
+  const ignoredRoutes = ["/login", "/chats/:chatId"];
+  const finalRoutes = routes.filter(
+    (route) => !ignoredRoutes.includes(route.path!)
+  );
   const { data: user } = useMe();
 
   return (

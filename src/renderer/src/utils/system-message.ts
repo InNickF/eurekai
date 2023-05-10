@@ -21,7 +21,7 @@ export const getSystemMessage = ({
   speakersQuantity?: Chat["speakersQuantity"];
 }) => `${systemMessage}
 
-To help guide this conversation, here is the context we're working with: "${
+To help guide this conversation, here is the context we're working with (provided by the user): "${
   context || "No context provided"
 }"
 

@@ -11,9 +11,17 @@ export const useUsers = () => {
   });
 };
 
-export const useUser = (userId: User["id"]) => {
+interface UseUserArgs {
+  userId: User["id"];
+  onError?: (error: unknown) => void;
+}
+export const useUser = ({ userId, onError }: UseUserArgs) => {
   return useQuery({
     ...queryKeys.users.detail(userId),
+    onError(error) {
+      onError?.(error);
+    },
+    enabled: !!userId,
   });
 };
 

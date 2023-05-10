@@ -1,5 +1,5 @@
+import { CreatedAt, UpdatedAt, User } from "@renderer/types";
 import { z } from "zod";
-import { User } from "@renderer/types";
 
 export const CHAT_TYPES = ["vanilla", "text", "audio", "video"] as const;
 export const MESSAGE_ROLES = ["user", "assistant", "system"] as const;
@@ -36,10 +36,47 @@ export class AuthError extends Error {
   }
 }
 
-export const splitText = (text: string, limit = 3000) => {
+export const splitText = ({
+  text,
+  limit = 1000,
+}: {
+  text?: string | null;
+  limit?: number;
+}) => {
+  if (!text) return [];
+  if (text.length < limit) return [text];
+
   const chunks: string[] = [];
   for (let i = 0; i < text.length; i += limit) {
     chunks.push(text.substring(i, i + limit));
   }
   return chunks;
 };
+
+export const getCreatedAt = () => {
+  return new Date();
+};
+
+export const orderByCreatedAt = <T extends CreatedAt>(items: T[]) => {
+  return items.sort((a, b) => {
+    return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+  });
+};
+
+export const getUpdatedAt = () => {
+  return new Date();
+};
+
+export const orderByUpdatedAt = <T extends UpdatedAt>(items: T[]) => {
+  return items.sort((a, b) => {
+    return new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime();
+  });
+};
+
+export const notFoundErrorMessage = "Not found.";
+
+export class NotFoundError extends Error {
+  constructor() {
+    super(notFoundErrorMessage);
+  }
+}

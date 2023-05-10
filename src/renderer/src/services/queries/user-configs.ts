@@ -10,17 +10,33 @@ export const useUserConfigs = () => {
     queryFn: getAllUserConfigs,
   });
 };
-
-export const useUserConfig = (configId: UserConfig["id"]) => {
+interface UseUserConfigArgs {
+  userConfigId: UserConfig["id"];
+  onError?: (error: unknown) => void;
+}
+export const useUserConfig = ({ userConfigId, onError }: UseUserConfigArgs) => {
   return useQuery({
-    ...queryKeys.userConfigs.detail(configId),
-    enabled: !!configId,
+    ...queryKeys.userConfigs.detail(userConfigId),
+    onError(error) {
+      onError?.(error);
+    },
+    enabled: !!userConfigId,
   });
 };
 
-export const useUserConfigByUserId = (userId: User["id"]) => {
+interface UseUserConfigByUserIdArgs {
+  userId: User["id"];
+  onError?: (error: unknown) => void;
+}
+export const useUserConfigByUserId = ({
+  userId,
+  onError,
+}: UseUserConfigByUserIdArgs) => {
   return useQuery({
     ...queryKeys.userConfigs.detailByUserId(userId),
+    onError(error) {
+      onError?.(error);
+    },
     enabled: !!userId,
   });
 };

@@ -74,10 +74,10 @@ const reducer: Reducer = (state, action) => {
 export const useLoadingChatFile = () => {
   const [loaderState, dispatch] = useReducer(reducer, initialState);
 
-  const initLoading = (message: InitLoadingReducerCreateAction["payload"]) => {
+  const initLoading = (message?: InitLoadingReducerCreateAction["payload"]) => {
     dispatch({
       type: reducerActionTypes.INIT_LOADING,
-      payload: message,
+      payload: message || "",
     });
   };
 
