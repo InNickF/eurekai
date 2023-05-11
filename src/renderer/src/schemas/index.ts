@@ -1,5 +1,10 @@
+import {
+  CHAT_COMPLETION_MODELS,
+  CHAT_TYPES,
+  MESSAGE_ROLES,
+  PROMPT_TYPES,
+} from "@renderer/utils";
 import { z } from "zod";
-import { CHAT_TYPES, PROMPT_TYPES, MESSAGE_ROLES } from "@renderer/utils";
 
 export const ChatTypeSchema = z.enum(CHAT_TYPES);
 export const MessageRoleSchema = z.enum(MESSAGE_ROLES);
@@ -11,6 +16,7 @@ export const CreatedAtSchema = z.object({
 export const UpdatedAtSchema = z.object({
   updatedAt: z.date(),
 });
+export const ChatCompletionModelsSchema = z.enum(CHAT_COMPLETION_MODELS);
 
 export const UserPayloadSchema = z.object({
   name: z.string(),
@@ -108,3 +114,48 @@ export const UserConfigSchema = z
     id: IdSchema,
   })
   .merge(UserConfigPayloadSchema);
+
+export const OpenAIMessageSchema = z.object({
+  role: MessageRoleSchema,
+  content: z.string(),
+  name: z.string().nullish(),
+});
+
+export const OpenAIMessagesSchema = z.array(OpenAIMessageSchema);
+
+export const OpenAICompletionExtraOptionsPayloadSchema = z.object({
+  temperature: z.number().nullish(),
+  n: z.number().nullish(),
+  max_tokens: z.number().nullish(),
+  presence_penalty: z.number().nullish(),
+  frequency_penalty: z.number().nullish(),
+  stop: z.array(z.string()).nullish(),
+});
+
+export const OpenAICompletionPayloadSchema = z
+  .object({
+    model: ChatCompletionModelsSchema,
+    messages: OpenAIMessagesSchema,
+  })
+  .merge(OpenAICompletionExtraOptionsPayloadSchema);
+
+export const OpenAICompletionResponseSchema = z.object({
+  id: z.string(),
+  object: z.string(),
+  created: z.number(),
+  choices: z.array(
+    z.object({
+      index: z.number(),
+      message: z.object({
+        role: z.literal(MessageRoleSchema.enum.assistant),
+        content: z.string(),
+      }),
+      finish_reason: z.string().nullish(),
+    })
+  ),
+  usage: z.object({
+    prompt_tokens: z.number(),
+    completion_tokens: z.number(),
+    total_tokens: z.number(),
+  }),
+});

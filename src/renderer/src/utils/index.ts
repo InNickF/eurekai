@@ -4,6 +4,11 @@ import { z } from "zod";
 export const CHAT_TYPES = ["vanilla", "text", "audio", "video"] as const;
 export const MESSAGE_ROLES = ["user", "assistant", "system"] as const;
 export const PROMPT_TYPES = ["user", "system"] as const;
+export const CHAT_COMPLETION_MODELS = [
+  "gpt-3.5-turbo",
+  "gpt-4",
+  "gpt-4-32k",
+] as const;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const schemaToString = (schema: z.ZodObject<any>): string => {

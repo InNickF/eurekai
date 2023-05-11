@@ -3,8 +3,9 @@ import { Page } from "@renderer/types";
 import { AppLayout } from "@renderer/ui/components/layout/AppLayout";
 import { notFoundErrorMessage } from "@renderer/utils";
 import { parseError } from "@renderer/utils/errors";
-import { FC } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { FC, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { Chat } from "./components/Chat";
 
 export const ChatPage: Page<FC> = () => {
   const { chatId } = useParams();
@@ -20,28 +21,16 @@ export const ChatPage: Page<FC> = () => {
     },
   });
 
-  if (!chatId) {
-    navigate("/chats");
-    return null;
-  }
+  useEffect(() => {
+    if (!chatId || chatId === ":chatId") {
+      navigate("/chats");
+    }
+  }, []);
 
   return (
     <section>
-      <p>chat id: {chatId}</p>
       {isLoading ? <p>loading...</p> : null}
-      {chat ? (
-        <>
-          <p>{chat.title || chat.context || "Untitled chat"}</p>
-          <p>{chat.systemMessage}</p>
-          <p>{chat.description}</p>
-          {chat.messages?.map((message) => (
-            <div key={message.id}>
-              <p>{message.content}</p>
-            </div>
-          ))}
-        </>
-      ) : null}
-      <Link to={`/`}>Go to home</Link>
+      {chat && !isLoading ? <Chat chat={chat} /> : null}
     </section>
   );
 };

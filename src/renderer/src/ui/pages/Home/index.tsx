@@ -6,7 +6,10 @@ import { ChatFromVideoForm } from "./components/ChatFromVideoForm";
 export const HomePage: Page<FC> = () => {
   return (
     <>
-      <h1>Hi</h1>
+      <header className="mb-12">
+        <h1>Create a new conversation.</h1>
+        <p>Explore all the hidden ideas in your content now!</p>
+      </header>
       <ChatFromVideoForm />
     </>
   );

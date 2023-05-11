@@ -1,4 +1,5 @@
 import {
+  ChatCompletionModelsSchema,
   ChatPayloadSchema,
   ChatSchema,
   ChatTypeSchema,
@@ -8,6 +9,11 @@ import {
   MessagePayloadSchema,
   MessageRoleSchema,
   MessageSchema,
+  OpenAICompletionExtraOptionsPayloadSchema,
+  OpenAICompletionPayloadSchema,
+  OpenAICompletionResponseSchema,
+  OpenAIMessageSchema,
+  OpenAIMessagesSchema,
   PromptCategoryPayloadSchema,
   PromptCategorySchema,
   PromptPayloadSchema,
@@ -68,3 +74,16 @@ export type Layout = (
 export type Page<T> = T & {
   layout?: Layout;
 };
+
+export type ChatCompletionModels = z.infer<typeof ChatCompletionModelsSchema>;
+export type OpenAIMessage = z.infer<typeof OpenAIMessageSchema>;
+export type OpenAIMessages = z.infer<typeof OpenAIMessagesSchema>;
+export type OpenAICompletionExtraOptionsPayload = z.infer<
+  typeof OpenAICompletionExtraOptionsPayloadSchema
+>;
+export type OpenAICompletionPayload = z.infer<
+  typeof OpenAICompletionPayloadSchema
+>;
+export type OpenAICompletionResponse = z.infer<
+  typeof OpenAICompletionResponseSchema
+>;

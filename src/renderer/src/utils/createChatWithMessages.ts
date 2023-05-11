@@ -41,7 +41,7 @@ export const createChatWithMessages = async ({
     userId: currentChat.userId,
     chatId: currentChat.id,
     content: initialPromptWithDivider,
-    role: "system",
+    role: "user",
     visible: false,
   };
 
