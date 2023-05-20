@@ -115,6 +115,21 @@ export const UserConfigSchema = z
   })
   .merge(UserConfigPayloadSchema);
 
+export const UserWithConfigSchema = UserSchema.merge(
+  z.object({
+    config: UserConfigSchema,
+  })
+);
+
+export const OpenAITranscriptionPayloadSchema = z.object({
+  audio: z.instanceof(File),
+  openAIKey: z.string(),
+});
+
+export const OpenAITranscriptionResponseSchema = z.object({
+  text: z.string(),
+});
+
 export const OpenAIMessageSchema = z.object({
   role: MessageRoleSchema,
   content: z.string(),

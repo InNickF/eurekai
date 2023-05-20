@@ -1,6 +1,7 @@
 import { Message, MessagePayload } from "@renderer/types";
 import { DB } from ".";
 import { NotFoundError, getCreatedAt } from "@renderer/utils";
+import { ChatRepository } from "./chat";
 
 type PromiseMessage = Promise<Message>;
 
@@ -46,12 +47,32 @@ export class MessageRepository extends DB {
   }
 
   async addMessage(message: MessagePayload): Promise<Message> {
+    const chatRepository = new ChatRepository();
+    const chat = await chatRepository.getChatById(message.chatId);
+    if (!chat) throw new NotFoundError();
     const messageId = (await this.messages.add({
       ...message,
       createdAt: getCreatedAt(),
     } as Message)) as number;
     const addedMessage = await this.getMessageById(messageId);
-    return addedMessage as Message;
+
+    await chatRepository.updateChat({
+      id: chat.id,
+      userId: chat.userId,
+      initialized: chat.initialized,
+      type: chat.type,
+      context: chat.context,
+      createdAt: chat.createdAt,
+      description: chat.description,
+      serializedData: chat.serializedData,
+      sourceFileName: chat.sourceFileName,
+      title: chat.title,
+      systemMessage: chat.systemMessage,
+      speakersQuantity: chat.speakersQuantity,
+      updatedAt: chat.updatedAt,
+    });
+
+    return addedMessage;
   }
 
   async updateMessage(message: Message): Promise<Message> {

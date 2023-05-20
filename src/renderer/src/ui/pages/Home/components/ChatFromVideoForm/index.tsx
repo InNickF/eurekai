@@ -1,6 +1,7 @@
 import { getAudioFromVideo } from "@renderer/services/api/files";
+import { getAudioTranscription } from "@renderer/services/api/openai";
+import { queryKeys } from "@renderer/services/keys";
 import { usePromptsByUserId } from "@renderer/services/queries/prompts";
-import { useUserConfigByUserId } from "@renderer/services/queries/user-configs";
 import { useMe } from "@renderer/services/queries/users";
 import { ChatPayload } from "@renderer/types";
 import { createChatWithMessages } from "@renderer/utils/createChatWithMessages";
@@ -8,7 +9,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useLoadingChatFile } from "../../hooks/useLoadingChatFile";
-import { queryKeys } from "@renderer/services/keys";
 
 interface ChatFromVideoFormFields {
   video: FileList;
@@ -21,7 +21,6 @@ export const ChatFromVideoForm = () => {
   const { initLoading, resetLoader, setLoaderMessage, loaderState } =
     useLoadingChatFile();
   const { data: user } = useMe();
-  const { data: userConfig } = useUserConfigByUserId({ userId: user?.id! });
   const { data: initialPrompts } = usePromptsByUserId({ userId: user?.id! });
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -36,18 +35,18 @@ export const ChatFromVideoForm = () => {
   });
 
   const getTranscriptionFromVideo = async (video: File) => {
-    if (!userConfig || !userConfig.apiKey) return;
+    if (!user?.config || !user?.config.apiKey) return;
 
     setLoaderMessage("Getting audio from video.");
     const audioResponse = await getAudioFromVideo(video);
 
     setLoaderMessage("Sending audio to get transcription.");
-    // const transcriptionResponse = await getAudioTranscription(
-    //   audioResponse.audioFile,
-    //   userConfig?.apiKey!
-    // );
+    const transcriptionResponse = await getAudioTranscription({
+      audio: audioResponse.audioFile,
+      openAIKey: user?.config?.apiKey,
+    });
 
-    const transcription = "This is a transcription.";
+    const transcription = transcriptionResponse.text;
     return {
       ...audioResponse,
       transcription,

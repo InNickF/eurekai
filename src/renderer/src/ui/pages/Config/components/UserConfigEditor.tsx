@@ -1,6 +1,6 @@
 import { useUpdateUserConfigMutation } from "@renderer/services/mutations/user-configs";
 import { useUpdateUserMutation } from "@renderer/services/mutations/users";
-import { User, UserConfig } from "@renderer/types";
+import { User, UserConfig, UserWithConfig } from "@renderer/types";
 import { FC } from "react";
 import { useForm } from "react-hook-form";
 
@@ -10,18 +10,14 @@ interface ConfigForm {
 }
 
 interface UserConfigEditorProps {
-  user: User;
-  config: UserConfig;
+  user: UserWithConfig;
 }
 
-export const UserConfigEditor: FC<UserConfigEditorProps> = ({
-  user,
-  config,
-}) => {
+export const UserConfigEditor: FC<UserConfigEditorProps> = ({ user }) => {
   const { register, handleSubmit } = useForm<ConfigForm>({
     defaultValues: {
       name: user.name,
-      apiKey: config.apiKey,
+      apiKey: user.config.apiKey,
     },
   });
 
@@ -30,12 +26,13 @@ export const UserConfigEditor: FC<UserConfigEditorProps> = ({
 
   const onSubmit = (data: ConfigForm) => {
     userMutation.mutate({
-      ...user,
+      id: user.id,
       name: data.name,
     });
     configMutation.mutate({
-      ...config,
       apiKey: data.apiKey,
+      id: user.config.id,
+      userId: user.id,
     });
   };
   return (

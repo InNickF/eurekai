@@ -1,21 +1,31 @@
+import { useAddNewUserMessageMutation } from "@renderer/services/mutations/messages";
 import { ChatWithMessages } from "@renderer/types";
-import { FC, useEffect } from "react";
+import { FC } from "react";
+import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { useInitializeChatOnMount } from "../../hooks/useInitializeChatOnMount";
 
 interface ChatProps {
   chat: ChatWithMessages;
 }
-
+interface ChatForm {
+  message: string;
+}
 export const Chat: FC<ChatProps> = ({ chat }) => {
-  useEffect(() => {
-    initializeChat();
-  }, []);
+  useInitializeChatOnMount({ chat });
+  const addMessageMutation = useAddNewUserMessageMutation();
+  const { register, handleSubmit, reset } = useForm<ChatForm>();
 
-  const initializeChat = () => {
-    if (chat.initialized) return;
-    console.log("chat not initialized");
+  const onSubmit = (data: ChatForm) => {
+    addMessageMutation.mutate({
+      userMessage: {
+        chatId: chat.id,
+        content: data.message,
+        userId: chat.userId,
+      },
+    });
+    reset();
   };
-
   return (
     <section>
       <p>chat id: {chat.id}</p>
@@ -32,6 +42,12 @@ export const Chat: FC<ChatProps> = ({ chat }) => {
           </div>
         ))}
       </section>
+      <form className="flex my-4" onSubmit={handleSubmit(onSubmit)}>
+        <input className="w-full" {...register("message")} />
+        <button className="px-4 w-max" type="submit">
+          Send
+        </button>
+      </form>
       <Link to={`/`}>Go to home</Link>
     </section>
   );

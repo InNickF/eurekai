@@ -30,13 +30,13 @@ export const getChatByUserId = async (userId: Chat["userId"]) => {
 export const createChat = async (chat: ChatPayload) => {
   const chatRepository = new ChatRepository();
   const response = await chatRepository.addChat(chat);
-  return ChatSchema.parse(response);
+  return ChatWithMessagesSchema.parse(response);
 };
 
 export const updateChat = async (chat: Chat) => {
   const chatRepository = new ChatRepository();
   const response = await chatRepository.updateChat(chat);
-  return ChatSchema.parse(response);
+  return ChatWithMessagesSchema.parse(response);
 };
 
 export const deleteChat = async (chat: Chat) => {

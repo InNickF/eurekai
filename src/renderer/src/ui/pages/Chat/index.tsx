@@ -3,13 +3,16 @@ import { Page } from "@renderer/types";
 import { AppLayout } from "@renderer/ui/components/layout/AppLayout";
 import { notFoundErrorMessage } from "@renderer/utils";
 import { parseError } from "@renderer/utils/errors";
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Chat } from "./components/Chat";
+import { useNoChatIdRedirect } from "./hooks/useNoChatIdRedirect";
 
 export const ChatPage: Page<FC> = () => {
   const { chatId } = useParams();
   const navigate = useNavigate();
+
+  useNoChatIdRedirect();
 
   const { data: chat, isLoading } = useChat({
     chatId: Number(chatId),
@@ -20,12 +23,6 @@ export const ChatPage: Page<FC> = () => {
       }
     },
   });
-
-  useEffect(() => {
-    if (!chatId || chatId === ":chatId") {
-      navigate("/chats");
-    }
-  }, []);
 
   return (
     <section>

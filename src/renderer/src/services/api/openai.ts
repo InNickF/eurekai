@@ -1,15 +1,20 @@
 import {
   OpenAICompletionPayloadSchema,
   OpenAICompletionResponseSchema,
+  OpenAITranscriptionResponseSchema,
 } from "@renderer/schemas";
 import {
   ChatCompletionModels,
   OpenAICompletionExtraOptionsPayload,
   OpenAICompletionPayload,
   OpenAIMessages,
+  OpenAITranscriptionPayload,
 } from "@renderer/types";
 
-export const getAudioTranscription = async (audio: File, openAIKey: string) => {
+export const getAudioTranscription = async ({
+  audio,
+  openAIKey,
+}: OpenAITranscriptionPayload) => {
   const formData = new FormData();
   formData.append("file", audio);
   formData.append("model", "whisper-1");
@@ -25,19 +30,23 @@ export const getAudioTranscription = async (audio: File, openAIKey: string) => {
     }
   );
   const data = await response.json();
-  return data;
+  return OpenAITranscriptionResponseSchema.parse(data);
 };
 
 interface GetChatCompletionArgs {
   model?: ChatCompletionModels;
   messages: OpenAIMessages;
   options?: OpenAICompletionExtraOptionsPayload;
+  openAIKey: string;
 }
 export const getChatCompletion = async ({
   messages,
   model = "gpt-3.5-turbo",
   options = {},
+  openAIKey,
 }: GetChatCompletionArgs) => {
+  if (!openAIKey) throw new Error("OpenAI Key is required");
+
   const payload: OpenAICompletionPayload = {
     messages,
     model,
@@ -50,7 +59,7 @@ export const getChatCompletion = async ({
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+      Authorization: `Bearer ${openAIKey}`,
     },
     body: JSON.stringify(parsedPayload),
   });

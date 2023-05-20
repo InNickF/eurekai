@@ -14,6 +14,8 @@ import {
   OpenAICompletionResponseSchema,
   OpenAIMessageSchema,
   OpenAIMessagesSchema,
+  OpenAITranscriptionPayloadSchema,
+  OpenAITranscriptionResponseSchema,
   PromptCategoryPayloadSchema,
   PromptCategorySchema,
   PromptPayloadSchema,
@@ -23,6 +25,7 @@ import {
   UserConfigSchema,
   UserPayloadSchema,
   UserSchema,
+  UserWithConfigSchema,
 } from "@renderer/schemas";
 import { z } from "zod";
 
@@ -54,6 +57,7 @@ export type UserConfig = z.infer<typeof UserConfigSchema>;
 export type UserConfigPayload = z.infer<typeof UserConfigPayloadSchema>;
 
 export type User = z.infer<typeof UserSchema>;
+export type UserWithConfig = z.infer<typeof UserWithConfigSchema>;
 export type UserPayload = z.infer<typeof UserPayloadSchema>;
 
 // export type Config = z.infer<typeof ConfigSchema>;
@@ -74,6 +78,14 @@ export type Layout = (
 export type Page<T> = T & {
   layout?: Layout;
 };
+
+export type OpenAITranscriptionPayload = z.infer<
+  typeof OpenAITranscriptionPayloadSchema
+>;
+
+export type OpenAITranscriptionResponse = z.infer<
+  typeof OpenAITranscriptionResponseSchema
+>;
 
 export type ChatCompletionModels = z.infer<typeof ChatCompletionModelsSchema>;
 export type OpenAIMessage = z.infer<typeof OpenAIMessageSchema>;

@@ -1,11 +1,11 @@
-import { User, UserPayload } from "@renderer/types";
+import { User, UserPayload, UserWithConfig } from "@renderer/types";
+import { NotFoundError } from "@renderer/utils";
 import { DB } from ".";
 import { ChatRepository } from "./chat";
-import { UserConfigRepository } from "./user-config";
 import { PromptCategoryRepository } from "./prompt-category";
-import { NotFoundError } from "@renderer/utils";
+import { UserConfigRepository } from "./user-config";
 
-type PromiseUser = Promise<User>;
+type PromiseUser = Promise<UserWithConfig>;
 
 export class UserRepository extends DB {
   constructor() {
@@ -19,30 +19,40 @@ export class UserRepository extends DB {
   async getUserById(id: User["id"]): PromiseUser {
     const user = await this.users.get(id);
     if (!user) throw new NotFoundError();
-    return user;
+    const userConfigRepository = new UserConfigRepository();
+    const userConfig = await userConfigRepository.getUserConfigByUserId(
+      user.id
+    );
+    if (!userConfig) throw new NotFoundError();
+    return { ...user, config: userConfig };
   }
 
   async getUserByName(name: User["name"]): PromiseUser {
     const user = await this.users.where("name").equals(name).first();
     if (!user) throw new NotFoundError();
-    return user;
+    const userConfigRepository = new UserConfigRepository();
+    const userConfig = await userConfigRepository.getUserConfigByUserId(
+      user.id
+    );
+    if (!userConfig) throw new NotFoundError();
+    return { ...user, config: userConfig };
   }
 
-  async addUser(user: UserPayload): Promise<User> {
+  async addUser(user: UserPayload): PromiseUser {
     await this.users.add(user as User);
     const newUser = (await this.getUserByName(user.name)) as User;
     const userConfigRepository = new UserConfigRepository();
-    await userConfigRepository.addUserConfig({
+    const userConfig = await userConfigRepository.addUserConfig({
       userId: newUser.id,
       apiKey: "",
     });
-    return newUser;
+    return { ...newUser, config: userConfig };
   }
 
-  async updateUser(user: User): Promise<User> {
+  async updateUser(user: User): PromiseUser {
     await this.users.update(user.id, user);
     const updatedUser = await this.getUserById(user.id);
-    return updatedUser as User;
+    return updatedUser;
   }
 
   async deleteUser(user: User): Promise<void> {
