@@ -39,14 +39,18 @@ export class UserRepository extends DB {
   }
 
   async addUser(user: UserPayload): PromiseUser {
-    await this.users.add(user as User);
-    const newUser = (await this.getUserByName(user.name)) as User;
+    const userId = (await this.users.add(user as User)) as number;
     const userConfigRepository = new UserConfigRepository();
-    const userConfig = await userConfigRepository.addUserConfig({
-      userId: newUser.id,
+    await userConfigRepository.addUserConfig({
+      userId: userId,
       apiKey: "",
     });
-    return { ...newUser, config: userConfig };
+
+    const newUser = (await this.getUserByName(user.name)) as User;
+    const newConfig = await userConfigRepository.getUserConfigByUserId(
+      newUser.id
+    );
+    return { ...newUser, config: newConfig };
   }
 
   async updateUser(user: User): PromiseUser {

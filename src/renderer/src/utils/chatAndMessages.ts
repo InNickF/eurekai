@@ -18,12 +18,22 @@ export const initializeChat = async ({
   const user = await getUser(restChat.userId);
   if (!user.config.apiKey) throw new Error("User does not have an API Key");
 
-  const AIResponse = await getChatCompletion({
-    messages: messages.map((message) => ({
+  const systemMessage: OpenAIMessage = {
+    content: restChat.systemMessage!,
+    role: "system",
+  };
+
+  const newMessages = [
+    systemMessage,
+    ...messages.map((message) => ({
       content: message.content,
       role: message.role,
       name: user.name,
     })),
+  ];
+
+  const AIResponse = await getChatCompletion({
+    messages: newMessages,
     openAIKey: user.config.apiKey,
   });
 
@@ -55,6 +65,11 @@ export const addNewUserMessage = async ({
   const user = await getUser(restChat.userId);
   if (!user.config.apiKey) throw new Error("User does not have an API Key");
 
+  const systemMessage: OpenAIMessage = {
+    content: restChat.systemMessage!,
+    role: "system",
+  };
+
   const newMessage: OpenAIMessage = {
     content: userMessage.content,
     role: "user",
@@ -68,7 +83,7 @@ export const addNewUserMessage = async ({
   }));
 
   const AIResponse = await getChatCompletion({
-    messages: [...newMessages, newMessage],
+    messages: [systemMessage, ...newMessages, newMessage],
     openAIKey: user.config.apiKey,
   });
 

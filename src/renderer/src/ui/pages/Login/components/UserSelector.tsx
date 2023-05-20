@@ -4,7 +4,7 @@ import {
   useDeleteUserMutation,
 } from "@renderer/services/mutations/users";
 import { useUsers } from "@renderer/services/queries/users";
-import { User } from "@renderer/types";
+import { User, UserPayload } from "@renderer/types";
 import { setUserSession } from "@renderer/utils";
 import { QueryClient } from "@tanstack/react-query";
 import { FC } from "react";
@@ -27,7 +27,7 @@ export const UserSelector: FC = () => {
   });
   const deleteUserMutation = useDeleteUserMutation();
 
-  const onSubmit = (data: User) => {
+  const onSubmit = (data: UserPayload) => {
     createUserMutation.mutate(data);
   };
 
