@@ -11,12 +11,12 @@ body {
 
 ::-moz-selection,
 *::-moz-selection {
-  @apply bg-primary-base text-primary-above-base !important;
+  @apply bg-primary-base text-primary-foreground !important;
 }
 
 ::selection,
 *::selection {
-  @apply bg-primary-base text-primary-above-base !important;
+  @apply bg-primary-base text-primary-foreground !important;
 }
 
 html,

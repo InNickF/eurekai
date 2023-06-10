@@ -9,6 +9,18 @@ const fontSizes = Object.entries(Tokens.fontSizes).reduce(
   {}
 );
 
+const convertColorObjToCSSVars = (colorObj) => {
+  return Object.entries(colorObj).reduce((newColorObj, [key, value]) => {
+    newColorObj[key] = Object.entries(value).reduce((subObj, [subKey]) => {
+      subObj[subKey] = `var(--color-${key}-${subKey})`;
+      return subObj;
+    }, {});
+    return newColorObj;
+  }, {});
+};
+
+const colors = convertColorObjToCSSVars(Tokens.colors);
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./src/renderer/index.html", "./src/renderer/**/*.{js,ts,jsx,tsx}"],
@@ -25,7 +37,7 @@ module.exports = {
     colors: {
       transparent: "transparent",
       current: "currentColor",
-      ...Tokens.colors,
+      ...colors,
     },
     fontFamily: {
       sans: [
